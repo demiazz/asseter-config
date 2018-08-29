@@ -1,0 +1,47 @@
+{
+  "name": "@asseter/config",
+  "version": "0.1.0",
+  "main": "lib/index.js",
+  "description": "Tools for reading Asseter config",
+  "license": "MIT",
+  "homepage": "https://github.com/demiazz/asseter-config",
+  "bugs": {
+    "url": "https://github.com/demiazz/asseter-config/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/demiazz/asseter-config"
+  },
+  "author": {
+    "name": "Alexey Plutalov",
+    "email": "demiazz.py@gmail.com"
+  },
+  "scripts": {
+    "build": "tsc",
+    "lint": "tslint --project .",
+    "lint-staged": "lint-staged",
+    "test": "jest"
+  },
+  "lint-staged": {
+    "lib/**/*.ts": [
+      "prettier --write",
+      "tslint",
+      "git add"
+    ]
+  },
+  "pre-commit": [
+    "lint-staged"
+  ],
+  "devDependencies": {
+    "@types/jest": "23.3.1",
+    "jest": "23.5.0",
+    "jest-junit": "5.1.0",
+    "lint-staged": "7.2.2",
+    "pre-commit": "1.2.2",
+    "prettier": "1.14.2",
+    "ts-jest": "23.1.4",
+    "tslint": "5.11.0",
+    "tslint-config-prettier": "1.15.0",
+    "typescript": "3.0.1"
+  }
+}
