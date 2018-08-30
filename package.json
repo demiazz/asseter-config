@@ -45,7 +45,6 @@
     "typescript": "3.0.3"
   },
   "dependencies": {
-    "@types/ajv": "^1.0.0",
     "@types/node": "10.9.3",
     "ajv": "^6.5.3"
   }
