@@ -1,4 +1,4 @@
-import { readJSON, readSchema } from '../utils';
+import { readJSON, readSchema, validate } from '../utils';
 
 import { getFixture, getFixturePath } from './helpers';
 
@@ -24,5 +24,29 @@ describe('readSchema', () => {
     const invalid = getFixture('helpers/invalid.json');
 
     expect(schema(invalid)).toBe(false);
+  });
+});
+
+describe('validate', () => {
+  describe('when configuration is valid', () => {
+    it("doesn't throw an error", () => {
+      const schemaPath = getFixturePath('helpers/schema.json');
+      const configurationPath = getFixturePath('helpers/valid.json');
+
+      expect(() => {
+        validate(schemaPath, configurationPath);
+      }).not.toThrow();
+    });
+  });
+
+  describe('when configuration is invalid', () => {
+    it("throws an error", () => {
+      const schemaPath = getFixturePath('helpers/schema.json');
+      const configurationPath = getFixturePath('helpers/invalid.json');
+
+      expect(() => {
+        validate(schemaPath, configurationPath);
+      }).toThrow();
+    });
   });
 });
