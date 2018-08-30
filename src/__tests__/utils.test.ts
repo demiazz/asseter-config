@@ -35,7 +35,7 @@ describe('validate', () => {
 
       expect(() => {
         validate(schemaPath, configurationPath);
-      }).not.toThrow();
+      }).not.toThrowError();
     });
   });
 
@@ -46,7 +46,16 @@ describe('validate', () => {
 
       expect(() => {
         validate(schemaPath, configurationPath);
-      }).toThrow();
+      }).toThrowError();
+    });
+
+    it("throws an error with all errors information", () => {
+      const schemaPath = getFixturePath('helpers/schema.json');
+      const configurationPath = getFixturePath('helpers/invalid.json');
+
+      expect(() => {
+        validate(schemaPath, configurationPath);
+      }).toThrowErrorMatchingSnapshot();
     });
   });
 });
