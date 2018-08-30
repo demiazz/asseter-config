@@ -1,5 +1,3 @@
-import { readFileSync } from 'fs';
-
 import { readJSON, readSchema } from '../utils';
 
 import { getFixture, getFixturePath } from './helpers';
