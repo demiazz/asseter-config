@@ -1,16 +1,10 @@
 import Ajv from 'ajv';
 import { readFileSync } from 'fs';
 
-type JSONScalar = string | number | boolean | null;
-
-interface IJSON {
-  [index: string]: IJSON | IJSON[] | JSONScalar | JSONScalar[];
-}
-
-export const readJSON = (fileName: string): IJSON => {
+export const readJSON = (fileName: string): JSON => {
   const content = readFileSync(fileName, { encoding: 'utf8' });
 
-  return JSON.parse(content) as IJSON;
+  return JSON.parse(content) as JSON;
 }
 
 export const readSchema = (fileName: string): Ajv.ValidateFunction => {
