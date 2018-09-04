@@ -11,7 +11,7 @@ export const readSchema = (fileName: string): Ajv.ValidateFunction => {
   const definition = readJSON(fileName);
   const schema = new Ajv({
     allErrors: true,
-    jsonPointers: false,
+    jsonPointers: false
   });
 
   return schema.compile(definition);
@@ -21,14 +21,17 @@ class ValidationError extends Error {
   constructor(errors: Ajv.ErrorObject[]) {
     super();
 
-    this.message = errors.reduce<string[]>(
-      (messages: string[], error: Ajv.ErrorObject) => {
-        messages.push(`configuration${error.dataPath} ${error.message}\n`);
+    this.message = errors
+      .reduce<string[]>(
+        (messages: string[], error: Ajv.ErrorObject) => {
+          messages.push(`configuration${error.dataPath} ${error.message}\n`);
 
-        return messages;
-      },
-      ["Asseter Invalid Configuration\n\n"]
-    ).join('').trim();
+          return messages;
+        },
+        ["Asseter Invalid Configuration\n\n"]
+      )
+      .join("")
+      .trim();
 
     Error.captureStackTrace(this, this.constructor);
   }
