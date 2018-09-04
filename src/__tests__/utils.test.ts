@@ -1,14 +1,36 @@
-import { readJSON, readSchema, validate } from "../utils";
+import { read, readSchema, validate } from "../utils";
 
 import { getFixture, getFixturePath } from "./helpers";
 
-describe("readJSON", () => {
-  it("reads and parses JSON file", () => {
-    const fileName = getFixturePath("helpers/readJSON.json");
-    const expected = getFixture("helpers/readJSON.json");
-    const actual = readJSON(fileName);
+describe("read", () => {
+  ["json", "yml", "yaml", "toml"].forEach(format => {
+    describe(`when given file with '.${format}' extension`, () => {
+      it("reads a given file", () => {
+        const fileName = getFixturePath(`helpers/read.${format}`);
+        const expected = {
+          firstLevel: {
+            secondLevel: {
+              thirdLevel: {
+                key: "value"
+              }
+            }
+          }
+        };
+        const actual = read(fileName);
 
-    expect(actual).toEqual(expected);
+        expect(actual).toEqual(expected);
+      });
+    });
+  });
+
+  describe("when given file of unsupported type", () => {
+    it("throws an error", () => {
+      const fileName = getFixturePath("helpers/read.ini");
+
+      expect(() => read(fileName)).toThrowError(
+        "Supported only JSON, YAML and TOML file types"
+      );
+    });
   });
 });
 

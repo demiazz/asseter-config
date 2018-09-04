@@ -1,3 +1,9 @@
 {
-  "asseter": "configuration"
+  "firstLevel": {
+    "secondLevel": {
+      "thirdLevel": {
+        "key": "value"
+      }
+    }
+  }
 }
