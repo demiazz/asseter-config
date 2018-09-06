@@ -5,7 +5,7 @@ export const getFixturePath = (fileName: string): string => {
   return join(__dirname, 'fixtures', fileName);
 }
 
-export const getFixture = (fileName: string): any => {
+export const getFixture = (fileName: string): JSON => {
   const fixturePath = getFixturePath(fileName);
   const content = readFileSync(fixturePath, { encoding: 'utf8' });
 
