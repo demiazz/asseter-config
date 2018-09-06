@@ -36,7 +36,7 @@ export const readSchema = (source: string | JSON): ValidateFunction => {
   const definition = typeof source === "string" ? read(source) : source;
   const schema = new Ajv({
     allErrors: true,
-    jsonPointers: true
+    jsonPointers: false
   });
 
   return schema.compile(definition);
