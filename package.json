@@ -17,7 +17,7 @@
     "email": "demiazz.py@gmail.com"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "rimraf lib && tsc",
     "lint": "tslint --project .",
     "lint-staged": "lint-staged",
     "test": "jest"
