@@ -3,7 +3,7 @@
   "environmentVariable": "NODE_ENV",
   "defaultEnvironment": "development",
   "providers": {
-    "application": {
+    "default": {
       "type": "webpack",
       "options": {
         "cache": true

@@ -36,24 +36,16 @@
       "type": "string"
     },
     "providers": {
-      "anyOf": [
-        {
-          "type": "object",
-          "properties": {
-            "default": {
-              "$ref": "#/definitions/provider"
-            }
-          },
-          "additionalProperties": false,
-          "required": ["default"]
-        },
-        {
-          "type": "object",
-          "additionalProperties": {
-            "$ref": "#/definitions/provider"
-          }
+      "type": "object",
+      "properties": {
+        "default": {
+          "$ref": "#/definitions/provider"
         }
-      ]
+      },
+      "required": ["default"],
+      "additionalProperties": {
+        "$ref": "#/definitions/provider"
+      }
     }
   },
   "required": [
