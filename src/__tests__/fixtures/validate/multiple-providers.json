@@ -1,0 +1,29 @@
+{
+  "packageManager": "npm",
+  "environmentVariable": "NODE_ENV",
+  "defaultEnvironment": "development",
+  "providers": {
+    "application": {
+      "type": "webpack",
+      "options": {
+        "cache": true
+      },
+      "environment": {
+        "development": {
+          "cache": false
+        }
+      }
+    },
+    "landing": {
+      "type": "rollup",
+      "options": {
+        "cache": true
+      },
+      "environment": {
+        "development": {
+          "cache": false
+        }
+      }
+    }
+  }
+}
