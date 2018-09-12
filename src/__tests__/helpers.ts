@@ -1,11 +1,13 @@
 import { readFileSync } from "fs";
 import { join } from "path";
 
+import { JSONValue } from '../types';
+
 export const getFixturePath = (fileName: string): string => {
   return join(__dirname, "fixtures", fileName);
 };
 
-export const getFixture = (fileName: string): JSON => {
+export const getFixture = (fileName: string): JSONValue => {
   const fixturePath = getFixturePath(fileName);
   const content = readFileSync(fixturePath, { encoding: "utf8" });
 

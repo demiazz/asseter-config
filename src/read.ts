@@ -4,7 +4,9 @@ import { safeLoad as parseYAML } from "js-yaml";
 import { extname } from "path";
 import { parse as parseTOML } from "toml";
 
-type Parser = (content: string) => JSON;
+import { JSONValue } from './types';
+
+type Parser = (content: string) => JSONValue;
 
 const getParser = (fileName: string): Parser | void => {
   switch (extname(fileName)) {
@@ -20,7 +22,7 @@ const getParser = (fileName: string): Parser | void => {
   }
 };
 
-export const read = (fileName: string): JSON => {
+export const read = (fileName: string): JSONValue => {
   const parse = getParser(fileName);
 
   if (!parse) {
@@ -39,5 +41,5 @@ export const readSchema = (source: string | JSON): ValidateFunction => {
     jsonPointers: false
   });
 
-  return schema.compile(definition);
+  return schema.compile(definition as any);
 };

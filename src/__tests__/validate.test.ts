@@ -9,7 +9,7 @@ describe("validate", () => {
     const data = getFixture(`validate/valid.json`);
 
     [definitionPath, definitionObject].forEach(definition => {
-      expect(validate(definition, data)).toEqual([]);
+      expect(validate(definition as any, data as any)).toEqual([]);
     });
   });
 
@@ -19,7 +19,7 @@ describe("validate", () => {
     const data = getFixture(`validate/invalid.json`);
 
     [definitionPath, definitionObject].forEach(definition => {
-      expect(validate(definition, data)).toEqual([
+      expect(validate(definition as any, data as any)).toEqual([
         {
           message: "should NOT have additional properties",
           path: ""
