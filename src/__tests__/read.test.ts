@@ -56,14 +56,4 @@ describe("readSchema", () => {
       });
     });
   });
-
-  describe("when given a schema's object", () => {
-    it("reads and parses JSON schema", () => {
-      const definition = getFixture('read/readSchema.json');
-      const validate = readSchema(definition as any);
-
-      expect(validate(valid)).toBe(true);
-      expect(validate(invalid)).toBe(false);
-    });
-  });
 });

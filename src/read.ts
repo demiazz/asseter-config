@@ -34,12 +34,12 @@ export const read = (fileName: string): JSONValue => {
   return parse(content);
 };
 
-export const readSchema = (source: string | JSON): ValidateFunction => {
-  const definition = typeof source === "string" ? read(source) : source;
-  const schema = new Ajv({
+export const readSchema = (definitionPath: string): ValidateFunction => {
+  const definition = read(definitionPath);
+  const compiler = new Ajv({
     allErrors: true,
-    jsonPointers: false
+    jsonPointers: false,
   });
 
-  return schema.compile(definition as any);
-};
+  return compiler.compile(definition as any);
+}
