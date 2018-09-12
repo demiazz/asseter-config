@@ -7,14 +7,14 @@ describe("validate", () => {
     const definitionPath = getFixturePath("validate/schema.json");
     const data = getFixture(`validate/valid.json`);
 
-    expect(validate(definitionPath, data as any)).toEqual([]);
+    expect(validate(definitionPath, data)).toEqual([]);
   });
 
   it("returns list of errors when data is invalid", () => {
     const definitionPath = getFixturePath("validate/schema.json");
     const data = getFixture(`validate/invalid.json`);
 
-    expect(validate(definitionPath, data as any)).toEqual([
+    expect(validate(definitionPath, data)).toEqual([
       {
         message: "should NOT have additional properties",
         path: ""

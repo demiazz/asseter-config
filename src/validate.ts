@@ -1,4 +1,5 @@
 import { readSchema } from "./read";
+import { JSONValue } from "./types";
 
 interface IValidationError {
   path: string;
@@ -6,8 +7,8 @@ interface IValidationError {
 }
 
 export const validate = (
-  definition: string | JSON,
-  data: JSON
+  definition: string,
+  data: JSONValue
 ): IValidationError[] => {
   const schema = readSchema(definition);
 
