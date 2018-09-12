@@ -41,5 +41,5 @@ export const readSchema = (definitionPath: string): ValidateFunction => {
     jsonPointers: false,
   });
 
-  return compiler.compile(definition as any);
+  return compiler.compile(definition as object);
 }
