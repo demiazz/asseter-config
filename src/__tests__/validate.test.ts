@@ -1,24 +1,38 @@
 import { validate } from "../validate";
 
-import { getFixture } from "./helpers";
+import { getFixture, getFixturePath } from "./helpers";
 
 describe("validate", () => {
   it("returns empty list of errors when data is valid", () => {
-    ["single-provider", "multiple-providers"].forEach(fixture => {
-      const data = getFixture(`validate/${fixture}.json`);
+    const definitionPath = getFixturePath("validate/schema.json");
+    const definitionObject = getFixture("validate/schema.json");
+    const data = getFixture(`validate/valid.json`);
 
-      expect(validate(data)).toEqual([]);
+    [definitionPath, definitionObject].forEach(definition => {
+      expect(validate(definition, data)).toEqual([]);
     });
   });
 
   it("returns list of errors when data is invalid", () => {
-    const data = getFixture("validate/empty.json");
+    const definitionPath = getFixturePath("validate/schema.json");
+    const definitionObject = getFixture("validate/schema.json");
+    const data = getFixture(`validate/invalid.json`);
 
-    expect(validate(data)).toEqual([
-      "configuration: should have required property 'packageManager'",
-      "configuration: should have required property 'environmentVariable'",
-      "configuration: should have required property 'defaultEnvironment'",
-      "configuration: should have required property 'providers'"
-    ]);
+    [definitionPath, definitionObject].forEach(definition => {
+      expect(validate(definition, data)).toEqual([
+        {
+          message: "should NOT have additional properties",
+          path: ""
+        },
+        {
+          message: "should be string",
+          path: ".foo"
+        },
+        {
+          message: "should be string",
+          path: ".bar"
+        }
+      ]);
+    });
   });
 });

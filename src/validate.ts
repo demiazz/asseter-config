@@ -1,22 +1,20 @@
-import { ErrorObject, ValidateFunction } from "ajv";
-import { resolve } from "path";
-
 import { readSchema } from "./read";
 
-const formatErrors = (root: string, errors: ErrorObject[]): string[] => {
-  return errors.map(
-    ({ dataPath, message }) => `${root}${dataPath}: ${message}`
-  );
-};
+interface IValidationError {
+  path: string;
+  message: string;
+}
 
-const validatePath = (schema: ValidateFunction, data: JSON): string[] => {
+export const validate = (
+  definition: string | JSON,
+  data: JSON
+): IValidationError[] => {
+  const schema = readSchema(definition);
+
   schema(data);
 
-  return formatErrors("configuration", schema.errors || []);
-};
-
-export const validate = (data: JSON): string[] => {
-  const schema = readSchema(resolve(__dirname, "../schema.json"));
-
-  return validatePath(schema, data);
+  return (schema.errors || []).map(({ dataPath, message = "" }) => ({
+    message,
+    path: dataPath
+  }));
 };
