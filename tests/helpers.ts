@@ -1,7 +1,7 @@
 import { readFileSync } from "fs";
 import { join } from "path";
 
-import { JSONValue } from '../src/types';
+import { JSONValue } from "../src/json";
 
 export const getFixturePath = (fileName: string): string => {
   return join(__dirname, "fixtures", fileName);

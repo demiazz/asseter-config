@@ -1,5 +1,5 @@
+import { JSONValue } from "../src/json";
 import { read, readSchema } from "../src/read";
-import { JSONValue } from "../src/types";
 
 import { getFixture, getFixturePath } from "./helpers";
 
@@ -42,7 +42,7 @@ describe("readSchema", () => {
   beforeAll(() => {
     valid = getFixture("read/valid.json");
     invalid = getFixture("read/invalid.json");
-  })
+  });
 
   describe("when given a schema's filename", () => {
     ["json", "toml", "yaml", "yml"].forEach(format => {

@@ -1,7 +1,8 @@
 import { resolve } from "path";
 
+import { JSONValue } from "./json";
 import { read } from "./read";
-import { JSONValue, RawConfiguration } from "./types";
+import { RawConfiguration } from "./types";
 import { Errors, validate, ValidationError } from "./validate";
 
 const schemaPath = resolve(__dirname, "../schema.json");

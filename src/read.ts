@@ -4,7 +4,7 @@ import { safeLoad as parseYAML } from "js-yaml";
 import { extname } from "path";
 import { parse as parseTOML } from "toml";
 
-import { JSONValue } from './types';
+import { JSONValue } from "./json";
 
 type Parser = (content: string) => JSONValue;
 
@@ -38,8 +38,8 @@ export const readSchema = (definitionPath: string): ValidateFunction => {
   const definition = read(definitionPath);
   const compiler = new Ajv({
     allErrors: true,
-    jsonPointers: false,
+    jsonPointers: false
   });
 
   return compiler.compile(definition as object);
-}
+};

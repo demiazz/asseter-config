@@ -1,4 +1,4 @@
-import { JSONValue } from "./types";
+import { JSONValue } from "./json";
 
 const isObject = (value: JSONValue): value is Record<string, JSONValue> => {
   if (value == null) {
