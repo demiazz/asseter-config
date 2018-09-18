@@ -8,25 +8,23 @@ interface JSONObject extends Record<string, JSONValue> {}
 
 export type JSONValue = JSONScalar | JSONArray | JSONObject;
 
-type PackageManager = "npm" | "yarn";
+type RawProviderOptions = JSONObject;
 
-type ProviderOptions = JSONObject;
+type RawProviderEnvironmentOptions = Record<string, RawProviderOptions>;
 
-type ProviderEnvironmentOptions = Record<string, ProviderOptions>;
-
-interface Provider extends JSONObject {
-  environment?: ProviderEnvironmentOptions;
-  options: ProviderOptions;
+interface RawProvider extends JSONObject {
+  environment?: RawProviderEnvironmentOptions;
+  options: RawProviderOptions;
   type: string;
 }
 
-interface Providers extends Record<string, Provider> {
-  default: Provider;
+interface RawProviders extends Record<string, RawProvider> {
+  default: RawProvider;
 }
 
-export interface Configuration extends JSONObject {
+export interface RawConfiguration extends JSONObject {
   defaultEnvironment: string;
   environmentVariable: string;
-  packageManager: PackageManager;
-  providers: Providers;
+  packageManager: "npm" | "yarn";
+  providers: RawProviders;
 }
