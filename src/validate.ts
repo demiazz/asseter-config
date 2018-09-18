@@ -1,7 +1,6 @@
 import { ErrorObject, ValidateFunction } from "ajv";
 
 import { JSONValue } from "./json";
-import { readSchema } from "./read";
 import { getByPath } from "./utils";
 
 export type Errors = Array<{ message: string; path: string }>;
