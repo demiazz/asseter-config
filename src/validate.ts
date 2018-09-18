@@ -4,7 +4,7 @@ import { readSchema } from "./read";
 import { JSONValue } from "./types";
 import { getByPath } from "./utils";
 
-type Errors = Array<{ message: string; path: string }>;
+export type Errors = Array<{ message: string; path: string }>;
 
 export class ValidationError extends Error {
   constructor(errors: Errors) {
