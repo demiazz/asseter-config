@@ -21,7 +21,5 @@ export const load = (filePath: string): RawConfiguration => {
     throw new ValidationError(rawConfigurationErrors);
   }
 
-  const rawConfiguration: RawConfiguration = data;
-
-  return rawConfiguration;
+  return data;
 };

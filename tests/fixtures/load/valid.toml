@@ -1,5 +1,5 @@
 defaultEnvironment = "development"
-environmentVariable = "NODE_ENV"
+environmentVariable = "ASSETER_ENV"
 packageManager = "yarn"
 
 [providers]
