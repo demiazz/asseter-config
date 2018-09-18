@@ -1,8 +1,8 @@
-type JSONScalar = boolean | null | number | string | void;
+export type JSONScalar = boolean | null | number | string | void;
 
-interface JSONArray extends Array<JSONValue> {}
+export interface JSONArray extends Array<JSONValue> {}
 
-interface JSONObject extends Record<string, JSONValue> {}
+export interface JSONObject extends Record<string, JSONValue> {}
 
 export type JSONValue = JSONScalar | JSONArray | JSONObject;
 
