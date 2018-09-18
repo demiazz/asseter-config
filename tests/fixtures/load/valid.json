@@ -1,0 +1,28 @@
+{
+  "defaultEnvironment": "development",
+  "environmentVariable": "NODE_ENV",
+  "packageManager": "yarn",
+  "providers": {
+    "default": {
+      "options": {
+        "cache": false,
+        "sourceMap": true
+      },
+      "environment": {
+        "production": {
+          "cache": true
+        },
+        "test": {
+          "sourceMap": false
+        }
+      },
+      "type": "webpack"
+    },
+    "landing": {
+      "options": {
+        "sourceMap": false
+      },
+      "type": "rollup"
+    }
+  }
+}

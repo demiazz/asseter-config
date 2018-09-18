@@ -1,0 +1,37 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[` 1`] = `
+"Invalid configuration:
+  root should NOT have additional properties
+  root should have required property 'defaultEnvironment'
+  root should have required property 'environmentVariable'
+  root should have required property 'packageManager'
+  root should have required property 'providers'"
+`;
+
+exports[` 2`] = `
+"Invalid configuration:
+  root should NOT have additional properties
+  root should have required property 'defaultEnvironment'
+  root should have required property 'environmentVariable'
+  root should have required property 'packageManager'
+  root should have required property 'providers'"
+`;
+
+exports[` 3`] = `
+"Invalid configuration:
+  root should NOT have additional properties
+  root should have required property 'defaultEnvironment'
+  root should have required property 'environmentVariable'
+  root should have required property 'packageManager'
+  root should have required property 'providers'"
+`;
+
+exports[` 4`] = `
+"Invalid configuration:
+  root should NOT have additional properties
+  root should have required property 'defaultEnvironment'
+  root should have required property 'environmentVariable'
+  root should have required property 'packageManager'
+  root should have required property 'providers'"
+`;

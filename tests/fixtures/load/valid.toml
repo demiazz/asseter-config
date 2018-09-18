@@ -1,0 +1,26 @@
+defaultEnvironment = "development"
+environmentVariable = "NODE_ENV"
+packageManager = "yarn"
+
+[providers]
+
+  [providers.default]
+  type = "webpack"
+
+    [providers.default.options]
+    cache = false
+    sourceMap = true
+
+    [providers.default.environment]
+
+      [providers.default.environment.production]
+      cache = true
+
+      [providers.default.environment.test]
+      sourceMap = false
+
+  [providers.landing]
+  type = "rollup"
+
+    [providers.landing.options]
+    sourceMap = false
