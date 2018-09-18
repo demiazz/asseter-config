@@ -1,0 +1,35 @@
+defaultEnvironment = "development"
+environmentVariable = "ASSETER_ENV"
+packageManager = "yarn"
+
+[providers]
+
+  [providers.default]
+  type = "webpack"
+
+    [providers.default.options]
+    shared = "unknown"
+
+    [providers.default.environment]
+
+      [providers.default.environment.development]
+      shared = "development"
+
+      [providers.default.environment.production]
+      shared = "production"
+      unique = true
+
+  [providers.landing]
+  type = "rollup"
+
+    [providers.landing.options]
+    shared = "unknown"
+
+    [providers.landing.environment]
+
+      [providers.landing.environment.development]
+      shared = "development"
+      unique = true
+
+      [providers.landing.environment.production]
+      shared = "production"

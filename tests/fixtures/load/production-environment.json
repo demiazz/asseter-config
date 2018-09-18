@@ -1,0 +1,20 @@
+{
+  "defaultEnvironment": "development",
+  "environmentVariable": "ASSETER_ENV",
+  "packageManager": "yarn",
+  "providers": {
+    "default": {
+      "options": {
+        "shared": "production",
+        "unique": true
+      },
+      "type": "webpack"
+    },
+    "landing": {
+      "options": {
+        "shared": "production"
+      },
+      "type": "rollup"
+    }
+  }
+}
