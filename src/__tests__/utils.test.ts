@@ -11,9 +11,9 @@ describe("getByPath", () => {
       ["undefined", undefined]
     ].forEach(([type, value]) => {
       it(`throws an error when given value of ${type} type`, () => {
-        expect(() => {
-          getByPath(value, []);
-        }).toThrowError("Value must be an object");
+        expect(() => getByPath(value, [])).toThrowError(
+          "Value must be an object"
+        );
       });
     });
   });
@@ -44,9 +44,9 @@ describe("getByPath", () => {
         ]
       };
 
-      expect(() => {
-        getByPath(object, ["foo", "bar"]);
-      }).toThrowError("Path 'foo.bar' doesn't exists");
+      expect(() => getByPath(object, ["foo", "bar"])).toThrowError(
+        "Path 'foo.bar' doesn't exists"
+      );
     });
   });
 });
