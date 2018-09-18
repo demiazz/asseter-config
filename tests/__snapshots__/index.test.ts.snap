@@ -1,8 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`validate when configuration is invalid throws an error with all errors information 1`] = `
-"Asseter Invalid Configuration
-
-configuration should NOT have additional properties
-configuration.isValid should be equal to one of the allowed values"
+"Invalid configuration:
+  root should NOT have additional properties
+  root.isValid should be equal to one of the allowed values"
 `;

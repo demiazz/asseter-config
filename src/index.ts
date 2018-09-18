@@ -1,26 +1,5 @@
-import { ErrorObject } from "ajv";
-
-import { read, readSchema } from './read';
-
-export class ValidationError extends Error {
-  constructor(errors: ErrorObject[]) {
-    super();
-
-    this.message = errors
-      .reduce<string[]>(
-        (messages: string[], error: ErrorObject) => {
-          messages.push(`configuration${error.dataPath} ${error.message}\n`);
-
-          return messages;
-        },
-        ["Asseter Invalid Configuration\n\n"]
-      )
-      .join("")
-      .trim();
-
-    Error.captureStackTrace(this, this.constructor);
-  }
-}
+import { read, readSchema } from "./read";
+import { ValidationError } from "./validate";
 
 export const validate = (
   schemaFileName: string,
@@ -30,6 +9,11 @@ export const validate = (
   const configuration = read(configurationFileName);
 
   if (!schema(configuration)) {
-    throw new ValidationError(schema.errors || []);
+    throw new ValidationError(
+      (schema.errors || []).map(({ dataPath, message = "" }) => ({
+        message,
+        path: dataPath
+      }))
+    );
   }
 };
