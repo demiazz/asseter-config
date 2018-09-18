@@ -1,5 +1,5 @@
 import { JSONValue } from "../src/json";
-import { read, readSchema } from "../src/read";
+import { read, readSchema, readSchemas } from "../src/read";
 
 import { getFixture, getFixturePath } from "./helpers";
 
@@ -55,6 +55,33 @@ describe("readSchema", () => {
           expect(validate(invalid)).toBe(false);
         });
       });
+    });
+  });
+});
+
+describe("readSchemas", () => {
+  let valid: JSONValue;
+  let invalid: JSONValue;
+
+  beforeAll(() => {
+    valid = getFixture("read/valid.json");
+    invalid = getFixture("read/invalid.json");
+  });
+
+  it("reads and parses given JSON schemas", () => {
+    const definitionPaths = {
+      json: getFixturePath("read/readSchema.json"),
+      toml: getFixturePath("read/readSchema.toml"),
+      yaml: getFixturePath("read/readSchema.yaml"),
+      yml: getFixturePath("read/readSchema.yml")
+    };
+    const schemas = readSchemas(definitionPaths);
+
+    Object.keys(definitionPaths).forEach(schemaName => {
+      const validate = schemas[schemaName];
+
+      expect(validate(valid)).toBe(true);
+      expect(validate(invalid)).toBe(false);
     });
   });
 });

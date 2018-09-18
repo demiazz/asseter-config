@@ -43,3 +43,17 @@ export const readSchema = (definitionPath: string): ValidateFunction => {
 
   return compiler.compile(definition as object);
 };
+
+export const readSchemas = (
+  definitionPaths: Record<string, string>
+): Record<string, ValidateFunction> => {
+  const schemas: Record<string, ValidateFunction> = {};
+
+  return Object.keys(definitionPaths).reduce((result, schemaName) => {
+    const definitionPath = definitionPaths[schemaName];
+
+    result[schemaName] = readSchema(definitionPath);
+
+    return result;
+  }, schemas);
+};
