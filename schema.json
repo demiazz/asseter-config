@@ -7,17 +7,17 @@
     "provider": {
       "type": "object",
       "properties": {
-        "type": {
-          "type": "string"
-        },
-        "options": {
-          "$ref": "#/definitions/options"
-        },
         "environment": {
           "type": "object",
           "additionalProperties": {
             "$ref": "#/definitions/options"
           }
+        },
+        "options": {
+          "$ref": "#/definitions/options"
+        },
+        "type": {
+          "type": "string"
         }
       },
       "required": ["type", "options"]
@@ -25,15 +25,15 @@
   },
   "type": "object",
   "properties": {
-    "packageManager": {
-      "type": "string",
-      "enum": ["npm", "yarn"]
+    "defaultEnvironment": {
+      "type": "string"
     },
     "environmentVariable": {
       "type": "string"
     },
-    "defaultEnvironment": {
-      "type": "string"
+    "packageManager": {
+      "type": "string",
+      "enum": ["npm", "yarn"]
     },
     "providers": {
       "type": "object",
@@ -49,9 +49,9 @@
     }
   },
   "required": [
-    "packageManager",
-    "environmentVariable",
     "defaultEnvironment",
+    "environmentVariable",
+    "packageManager",
     "providers"
   ],
   "additionalProperties": false
