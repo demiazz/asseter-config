@@ -1,16 +1,30 @@
 import { resolve } from "path";
 
-import { JSONObject, JSONValue } from "./json";
+import { JSONObject, JSONScalar, JSONValue } from "./json";
 import { read } from "./read";
 import { Errors, validate, ValidationError } from "./validate";
 
-type RawProviderOptions = JSONObject;
+type ProviderOptions = Record<string, JSONScalar>;
 
-type RawProviderEnvironmentOptions = Record<string, RawProviderOptions>;
+interface Provider {
+  options: ProviderOptions;
+  type: string;
+}
+
+interface Providers extends Record<string, Provider> {
+  default: Provider;
+}
+
+interface Configuration {
+  defaultEnvironment: string;
+  environmentVariable: string;
+  packageManager: "npm" | "yarn";
+  providers: Providers;
+}
 
 interface RawProvider extends JSONObject {
-  environment?: RawProviderEnvironmentOptions;
-  options: RawProviderOptions;
+  environment?: Record<string, ProviderOptions>;
+  options: ProviderOptions;
   type: string;
 }
 
