@@ -12,9 +12,6 @@ workflows:
       - install_dependencies:
           requires:
             - checkout
-      - audit:
-          requires:
-            - install_dependencies
       - lint:
           requires:
             - install_dependencies
@@ -50,31 +47,19 @@ jobs:
           at: .
       - restore_cache:
           keys:
-            - asseter-config-dependencies-{{ checksum "package-lock.json" }}
+            - asseter-config-dependencies-{{ checksum "yarn.lock" }}
             - asseter-config-dependencies
       - run:
-          name: Updating NPM
-          command: sudo npm install -g npm@latest && sudo chmod 777 /usr/local/bin/npm
-      - run:
           name: Install dependencies
-          command: npm install
+          command: yarn install
       - save_cache:
-          key: asseter-config-dependencies-{{ checksum "package-lock.json" }}
+          key: asseter-config-dependencies-{{ checksum "yarn.lock" }}
           paths:
             - node_modules
       - persist_to_workspace:
           root: .
           paths:
             - node_modules
-
-  audit:
-    <<: *defaults
-    steps:
-      - attach_workspace:
-          at: .
-      - run:
-          name: Audit
-          command: npm audit
 
   lint:
     <<: *defaults
@@ -83,7 +68,7 @@ jobs:
           at: .
       - run:
           name: Linting
-          command: npm run lint -- --format junit --out lint-results.xml
+          command: yarn lint --format junit --out lint-results.xml
       - store_test_results:
           path: lint-results.xml
 
@@ -94,7 +79,7 @@ jobs:
           at: .
       - run:
           name: Build
-          command: npm run build
+          command: yarn build
 
   test:
     <<: *defaults
@@ -103,7 +88,7 @@ jobs:
           at: .
       - run:
           name: Tests
-          command: npm test -- --ci --reporters=default --reporters=jest-junit
+          command: yarn test --ci --reporters=default --reporters=jest-junit
           environment:
             JEST_JUNIT_OUTPUT: test-results.xml
       - store_test_results:
