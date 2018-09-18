@@ -1,5 +1,3 @@
-/* tslint:disable: interface-name */
-
 type JSONScalar = boolean | null | number | string | void;
 
 interface JSONArray extends Array<JSONValue> {}
