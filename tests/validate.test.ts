@@ -1,4 +1,4 @@
-import { validate } from "../validate";
+import { validate } from "../src/validate";
 
 import { getFixture, getFixturePath } from "./helpers";
 

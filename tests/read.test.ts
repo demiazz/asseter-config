@@ -1,4 +1,5 @@
-import { read, readSchema } from "../read";
+import { read, readSchema } from "../src/read";
+import { JSONValue } from "../src/types";
 
 import { getFixture, getFixturePath } from "./helpers";
 
@@ -35,8 +36,8 @@ describe("read", () => {
 });
 
 describe("readSchema", () => {
-  let valid;
-  let invalid;
+  let valid: JSONValue;
+  let invalid: JSONValue;
 
   beforeAll(() => {
     valid = getFixture("read/valid.json");

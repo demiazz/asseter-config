@@ -1,4 +1,4 @@
-import { getByPath } from "../utils";
+import { getByPath } from "../src/utils";
 
 describe("getByPath", () => {
   describe("when value is not an object", () => {
