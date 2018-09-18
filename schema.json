@@ -3,7 +3,7 @@
     "options": {
       "type": "object",
       "additionalProperties": {
-        "anyOf": [
+        "oneOf": [
           { "type": "boolean" },
           { "type": "null" },
           { "type": "number" },
