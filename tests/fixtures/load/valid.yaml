@@ -1,4 +1,4 @@
-defaultEnvironment: development
+defaultEnvironment: special
 environmentVariable: ASSETER_ENV
 packageManager: yarn
 providers:
@@ -15,4 +15,7 @@ providers:
   landing:
     options:
       sourceMap: false
+    environment:
+      special:
+        uglify: true
     type: rollup

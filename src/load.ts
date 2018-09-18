@@ -48,7 +48,52 @@ const isRawConfiguration = (
   return errors.length === 0;
 };
 
-export const load = (filePath: string): RawConfiguration => {
+const toProvider = (
+  { environment = {}, options, type }: RawProvider,
+  currentEnvironment: string
+): Provider => {
+  const environmentOptions = environment[currentEnvironment] || {};
+
+  return { options: { ...options, ...environmentOptions }, type };
+};
+
+const toProviders = (
+  rawProviders: RawProviders,
+  currentEnvironment: string
+): Providers => {
+  const providers = {
+    default: toProvider(rawProviders.default, currentEnvironment)
+  };
+
+  return Object.keys(rawProviders).reduce<Providers>((result, providerName) => {
+    if (providerName !== "default") {
+      const rawProvider = rawProviders[providerName];
+
+      result[providerName] = toProvider(rawProvider, currentEnvironment);
+    }
+
+    return result;
+  }, providers);
+};
+
+const toConfiguration = ({
+  defaultEnvironment,
+  environmentVariable,
+  packageManager,
+  providers
+}: RawConfiguration): Configuration => {
+  const currentEnvironment =
+    process.env[environmentVariable] || defaultEnvironment;
+
+  return {
+    defaultEnvironment,
+    environmentVariable,
+    packageManager,
+    providers: toProviders(providers, currentEnvironment)
+  };
+};
+
+export const load = (filePath: string): Configuration => {
   const data: JSONValue = read(filePath);
   const rawConfigurationErrors: Errors = validate(schemaPath, data);
 
@@ -56,5 +101,5 @@ export const load = (filePath: string): RawConfiguration => {
     throw new ValidationError(rawConfigurationErrors);
   }
 
-  return data;
+  return toConfiguration(data);
 };

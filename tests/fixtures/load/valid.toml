@@ -1,4 +1,4 @@
-defaultEnvironment = "development"
+defaultEnvironment = "special"
 environmentVariable = "ASSETER_ENV"
 packageManager = "yarn"
 
@@ -24,3 +24,8 @@ packageManager = "yarn"
 
     [providers.landing.options]
     sourceMap = false
+
+    [providers.landing.environment]
+
+      [providers.landing.environment.special]
+      uglify = true
