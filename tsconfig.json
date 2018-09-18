@@ -1,6 +1,8 @@
 {
   "compilerOptions": {
     "alwaysStrict": true,
+    "declaration": true,
+    "declarationDir": "./typings",
     "esModuleInterop": true,
     "lib": [
       "es2015",
@@ -15,6 +17,7 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "outDir": "./lib",
+    "pretty": true,
     "removeComments": true,
     "rootDir": "./src",
     "strict": true,

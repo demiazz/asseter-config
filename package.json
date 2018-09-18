@@ -2,6 +2,7 @@
   "name": "@asseter/config",
   "version": "0.1.0",
   "main": "lib/index.js",
+  "typings": "typings/index.d.ts",
   "description": "Tools for reading Asseter config",
   "license": "MIT",
   "homepage": "https://github.com/demiazz/asseter-config",
@@ -17,7 +18,7 @@
     "email": "demiazz.py@gmail.com"
   },
   "scripts": {
-    "build": "rimraf lib && tsc",
+    "build": "rimraf lib && rimraf typings && tsc && prettier --write ./{lib,typings}/*.js",
     "lint": "tslint --project .",
     "lint-staged": "lint-staged",
     "test": "jest"
