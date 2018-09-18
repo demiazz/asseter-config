@@ -1,7 +1,7 @@
 import { resolve } from "path";
 
 import { JSONObject, JSONScalar, JSONValue } from "./json";
-import { read } from "./read";
+import { read, readSchema } from "./read";
 import { Errors, validate, ValidationError } from "./validate";
 
 type ProviderOptions = Record<string, JSONScalar>;
@@ -95,7 +95,7 @@ const toConfiguration = ({
 
 export const load = (filePath: string): Configuration => {
   const data: JSONValue = read(filePath);
-  const rawConfigurationErrors: Errors = validate(schemaPath, data);
+  const rawConfigurationErrors: Errors = validate(readSchema(schemaPath), data);
 
   if (!isRawConfiguration(data, rawConfigurationErrors)) {
     throw new ValidationError(rawConfigurationErrors);

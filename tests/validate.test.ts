@@ -1,3 +1,4 @@
+import { readSchema } from "../src/read";
 import { validate, ValidationError } from "../src/validate";
 
 import { getFixture, getFixturePath } from "./helpers";
@@ -13,9 +14,9 @@ describe("validate", () => {
   ].forEach(([type, value]) => {
     describe(`given value of type '${type}'`, () => {
       it("throws an error", () => {
-        const definition = getFixturePath("validate/schema.json");
+        const schema = readSchema(getFixturePath("validate/schema.json"));
 
-        expect(() => validate(definition, value)).toThrowError(
+        expect(() => validate(schema, value)).toThrowError(
           "Value must be an object"
         );
       });
@@ -24,12 +25,12 @@ describe("validate", () => {
 
   describe("when given path doesn't exist", () => {
     it("throws an error", () => {
-      const definitionPath = getFixturePath("validate/schema.json");
+      const schema = readSchema(getFixturePath("validate/schema.json"));
       const data = {
         bar: [{ baz: "foo" }]
       };
 
-      expect(() => validate(definitionPath, data, ["bar", "baz"])).toThrowError(
+      expect(() => validate(schema, data, ["bar", "baz"])).toThrowError(
         "Path 'bar.baz' doesn't exists"
       );
     });
@@ -37,17 +38,17 @@ describe("validate", () => {
 
   describe("when path is empty", () => {
     it("returns empty list of errors when data is valid", () => {
-      const definitionPath = getFixturePath("validate/schema.json");
+      const schema = readSchema(getFixturePath("validate/schema.json"));
       const data = getFixture("validate/valid.json");
 
-      expect(validate(definitionPath, data)).toEqual([]);
+      expect(validate(schema, data)).toEqual([]);
     });
 
     it("returns list of errors when data is invalid", () => {
-      const definitionPath = getFixturePath("validate/schema.json");
+      const schema = readSchema(getFixturePath("validate/schema.json"));
       const data = getFixture("validate/invalid.json");
 
-      expect(validate(definitionPath, data)).toEqual([
+      expect(validate(schema, data)).toEqual([
         {
           message: "should NOT have additional properties",
           path: ""
@@ -66,29 +67,25 @@ describe("validate", () => {
 
   describe("when given path is not empty", () => {
     it("returns empty list of errors when data by path is valid", () => {
-      const definitionPath = getFixturePath("validate/schema.json");
+      const schema = readSchema(getFixturePath("validate/schema.json"));
       const data = {
         firstLevel: {
           secondLevel: getFixture("validate/valid.json")
         }
       };
 
-      expect(
-        validate(definitionPath, data, ["firstLevel", "secondLevel"])
-      ).toEqual([]);
+      expect(validate(schema, data, ["firstLevel", "secondLevel"])).toEqual([]);
     });
 
     it("returns list of errors when data is invalid", () => {
-      const definitionPath = getFixturePath("validate/schema.json");
+      const schema = readSchema(getFixturePath("validate/schema.json"));
       const data = {
         firstLevel: {
           secondLevel: getFixture("validate/invalid.json")
         }
       };
 
-      expect(
-        validate(definitionPath, data, ["firstLevel", "secondLevel"])
-      ).toEqual([
+      expect(validate(schema, data, ["firstLevel", "secondLevel"])).toEqual([
         {
           message: "should NOT have additional properties",
           path: ".firstLevel.secondLevel"
@@ -109,9 +106,9 @@ describe("validate", () => {
 describe("ValidationError", () => {
   describe(".constructor", () => {
     it("assembles message error from errors list", () => {
-      const definitionPath = getFixturePath("validate/schema.json");
+      const schema = readSchema(getFixturePath("validate/schema.json"));
       const data = getFixture("validate/invalid.json");
-      const errors = validate(definitionPath, data);
+      const errors = validate(schema, data);
       const error = new ValidationError(errors);
 
       expect(error.message).toEqual(

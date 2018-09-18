@@ -1,4 +1,4 @@
-import { ErrorObject } from "ajv";
+import { ErrorObject, ValidateFunction } from "ajv";
 
 import { JSONValue } from "./json";
 import { readSchema } from "./read";
@@ -35,12 +35,10 @@ const processErrors = (errors: ErrorObject[], path: string[]): Errors => {
 };
 
 export const validate = (
-  definition: string,
+  schema: ValidateFunction,
   data: JSONValue,
   path: string[] = []
 ): Errors => {
-  const schema = readSchema(definition);
-
   schema(getByPath(data, path));
 
   return processErrors(schema.errors || [], path);
