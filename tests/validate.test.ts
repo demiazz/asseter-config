@@ -1,17 +1,10 @@
 import { readSchema } from "../src/read";
 import { validate, ValidationError } from "../src/validate";
 
-import { getFixture, getFixturePath } from "./helpers";
+import { forEachJSONType, getFixture, getFixturePath } from "./helpers";
 
 describe("validate", () => {
-  [
-    ["boolean", true],
-    ["null", null],
-    ["number", 10],
-    ["string", ""],
-    ["undefined", undefined],
-    ["array", []]
-  ].forEach(([type, value]) => {
+  forEachJSONType((type, value) => {
     describe(`given value of type '${type}'`, () => {
       it("throws an error", () => {
         const schema = readSchema(getFixturePath("validate/schema.json"));

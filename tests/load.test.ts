@@ -1,8 +1,14 @@
 import { load } from "../src/load";
-import { getFixture, getFixturePath, setEnvironment } from "./helpers";
+
+import {
+  forEachFormat,
+  getFixture,
+  getFixturePath,
+  setEnvironment
+} from "./helpers";
 
 describe("load", () => {
-  ["json", "toml", "yaml", "yml"].forEach(format => {
+  forEachFormat(format => {
     describe(`when given file with '.${format}' extension`, () => {
       it("reads a raw configuration from a file", () => {
         const expected = getFixture(`load/valid-expected.json`);
