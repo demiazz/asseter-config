@@ -7,6 +7,22 @@ export const forEachFormat = (callback: (format: string) => void) => {
   ["json", "toml", "yaml", "yml"].forEach(callback);
 };
 
+export const forEachJSONType = (
+  callback: (
+    type: string,
+    value: boolean | null | number | string | void | any[]
+  ) => void
+) => {
+  [
+    { type: "boolean", value: true },
+    { type: "null", value: null },
+    { type: "number", value: 10 },
+    { type: "string", value: "" },
+    { type: "undefined", value: undefined },
+    { type: "array", value: [] }
+  ].forEach(({ type, value }) => callback(type, value));
+};
+
 export const getFixturePath = (fileName: string): string => {
   return join(__dirname, "fixtures", fileName);
 };
