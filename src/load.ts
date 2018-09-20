@@ -40,7 +40,7 @@ interface RawConfiguration extends JSONObject {
   providers: RawProviders;
 }
 
-const schemaPath = resolve(__dirname, "../schema.json");
+const rootSchema = readSchema(resolve(__dirname, "../schema.json"));
 
 const isRawConfiguration = (
   _: JSONValue,
@@ -100,7 +100,7 @@ const toConfiguration = ({
 
 export const load = (filePath: string): Configuration => {
   const data: JSONValue = read(filePath);
-  const rawConfigurationErrors: Errors = validate(readSchema(schemaPath), data);
+  const rawConfigurationErrors: Errors = validate(rootSchema, data);
 
   if (!isRawConfiguration(data, rawConfigurationErrors)) {
     throw new ValidationError(rawConfigurationErrors);
