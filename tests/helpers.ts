@@ -3,6 +3,10 @@ import { join } from "path";
 
 import { JSONValue } from "../src/json";
 
+export const forEachFormat = (callback: (format: string) => void) => {
+  ["json", "toml", "yaml", "yml"].forEach(callback);
+};
+
 export const getFixturePath = (fileName: string): string => {
   return join(__dirname, "fixtures", fileName);
 };
