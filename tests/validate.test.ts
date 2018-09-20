@@ -4,10 +4,14 @@ import { validate, ValidationError } from "../src/validate";
 import { forEachJSONType, getFixture, getFixturePath } from "./helpers";
 
 describe("validate", () => {
+  const schemaPath = getFixturePath("validate/validate/schema.json");
+  const validFixture = "validate/validate/valid.json";
+  const invalidFixture = "validate/validate/invalid.json";
+
   forEachJSONType((type, value) => {
     describe(`given value of type '${type}'`, () => {
       it("throws an error", () => {
-        const schema = readSchema(getFixturePath("validate/schema.json"));
+        const schema = readSchema(schemaPath);
 
         expect(() => validate(schema, value)).toThrowError(
           "Value must be an object"
@@ -18,7 +22,7 @@ describe("validate", () => {
 
   describe("when given path doesn't exist", () => {
     it("throws an error", () => {
-      const schema = readSchema(getFixturePath("validate/schema.json"));
+      const schema = readSchema(schemaPath);
       const data = {
         bar: [{ baz: "foo" }]
       };
@@ -31,15 +35,15 @@ describe("validate", () => {
 
   describe("when path is empty", () => {
     it("returns empty list of errors when data is valid", () => {
-      const schema = readSchema(getFixturePath("validate/schema.json"));
-      const data = getFixture("validate/valid.json");
+      const schema = readSchema(schemaPath);
+      const data = getFixture(validFixture);
 
       expect(validate(schema, data)).toEqual([]);
     });
 
     it("returns list of errors when data is invalid", () => {
-      const schema = readSchema(getFixturePath("validate/schema.json"));
-      const data = getFixture("validate/invalid.json");
+      const schema = readSchema(schemaPath);
+      const data = getFixture(invalidFixture);
 
       expect(validate(schema, data)).toEqual([
         {
@@ -60,10 +64,10 @@ describe("validate", () => {
 
   describe("when given path is not empty", () => {
     it("returns empty list of errors when data by path is valid", () => {
-      const schema = readSchema(getFixturePath("validate/schema.json"));
+      const schema = readSchema(schemaPath);
       const data = {
         firstLevel: {
-          secondLevel: getFixture("validate/valid.json")
+          secondLevel: getFixture(validFixture)
         }
       };
 
@@ -71,10 +75,10 @@ describe("validate", () => {
     });
 
     it("returns list of errors when data is invalid", () => {
-      const schema = readSchema(getFixturePath("validate/schema.json"));
+      const schema = readSchema(schemaPath);
       const data = {
         firstLevel: {
-          secondLevel: getFixture("validate/invalid.json")
+          secondLevel: getFixture(invalidFixture)
         }
       };
 
@@ -99,8 +103,10 @@ describe("validate", () => {
 describe("ValidationError", () => {
   describe(".constructor", () => {
     it("assembles message error from errors list", () => {
-      const schema = readSchema(getFixturePath("validate/schema.json"));
-      const data = getFixture("validate/invalid.json");
+      const schema = readSchema(
+        getFixturePath("validate/validation-error/schema.json")
+      );
+      const data = getFixture("validate/validation-error/invalid.json");
       const errors = validate(schema, data);
       const error = new ValidationError(errors);
 
