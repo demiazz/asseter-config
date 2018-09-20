@@ -1,35 +1,45 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[` 1`] = `
+exports[`load validates providers options after merging environment options throws an error 1`] = `
 "Invalid configuration:
-  root should NOT have additional properties
-  root should have required property 'defaultEnvironment'
-  root should have required property 'environmentVariable'
-  root should have required property 'packageManager'
-  root should have required property 'providers'"
+  root.providers.default.options should NOT have additional properties
+  root.providers.default.options should NOT have additional properties
+  root.providers.default.options should NOT have additional properties
+  root.providers.default.options should NOT have additional properties
+  root.providers.default.options.sourceMap should be boolean
+  root.providers.mainLanding.options should NOT have additional properties
+  root.providers.mainLanding.options should NOT have additional properties
+  root.providers.mainLanding.options should NOT have additional properties
+  root.providers.mainLanding.options should NOT have additional properties
+  root.providers.mainLanding.options.sourceMap should be boolean"
 `;
 
-exports[` 2`] = `
+exports[`load validates providers options after merging options throws an error 1`] = `
 "Invalid configuration:
-  root should NOT have additional properties
-  root should have required property 'defaultEnvironment'
-  root should have required property 'environmentVariable'
-  root should have required property 'packageManager'
-  root should have required property 'providers'"
+  root.providers.default.options should NOT have additional properties
+  root.providers.default.options.cache should be boolean
+  root.providers.default.options.sourceMap should be boolean
+  root.providers.landing.options should NOT have additional properties
+  root.providers.landing.options.sourceMap should be boolean"
 `;
 
-exports[` 3`] = `
+exports[`load validates providers options before processing throws an error 1`] = `
 "Invalid configuration:
-  root should NOT have additional properties
-  root should have required property 'defaultEnvironment'
-  root should have required property 'environmentVariable'
-  root should have required property 'packageManager'
-  root should have required property 'providers'"
+  root.providers.default.options should NOT have additional properties
+  root.providers.default.options.cache should be boolean
+  root.providers.default.options.sourceMap should be boolean
+  root.providers.default.environment.production should NOT have additional properties
+  root.providers.default.environment.production.cache should be boolean
+  root.providers.default.environment.test should NOT have additional properties
+  root.providers.default.environment.test.sourceMap should be boolean
+  root.providers.landing.options should NOT have additional properties
+  root.providers.landing.options.sourceMap should be boolean
+  root.providers.landing.environment.special should NOT have additional properties
+  root.providers.landing.environment.special.uglify should be boolean"
 `;
 
-exports[` 4`] = `
+exports[`load validates root configuration throws an error 1`] = `
 "Invalid configuration:
-  root should NOT have additional properties
   root should have required property 'defaultEnvironment'
   root should have required property 'environmentVariable'
   root should have required property 'packageManager'

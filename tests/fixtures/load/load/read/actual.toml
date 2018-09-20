@@ -8,28 +8,24 @@ packageManager = "yarn"
   type = "webpack"
 
     [providers.default.options]
-    shared = "unknown"
+    cache = false
+    sourceMap = true
 
     [providers.default.environment]
 
-      [providers.default.environment.development]
-      shared = "development"
-
       [providers.default.environment.production]
-      shared = "production"
-      unique = true
+      cache = true
+
+      [providers.default.environment.test]
+      sourceMap = false
 
   [providers.landing]
   type = "rollup"
 
     [providers.landing.options]
-    shared = "unknown"
+    sourceMap = false
 
     [providers.landing.environment]
 
-      [providers.landing.environment.development]
-      shared = "development"
-      unique = true
-
-      [providers.landing.environment.production]
-      shared = "production"
+      [providers.landing.environment.special]
+      uglify = true

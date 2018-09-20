@@ -1,0 +1,12 @@
+{
+  "type": "object",
+  "properties": {
+    "cache": {
+      "oneOf": [{ "type": "boolean" }, { "type": "string" }]
+    },
+    "sourceMap": {
+      "oneOf": [{ "type": "boolean" }, { "type": "string" }]
+    }
+  },
+  "additionalProperties": true
+}

@@ -5,14 +5,14 @@
   "providers": {
     "default": {
       "options": {
-        "shared": "production",
-        "unique": true
+        "cache": true,
+        "sourceMap": true
       },
       "type": "webpack"
     },
     "landing": {
       "options": {
-        "shared": "production"
+        "sourceMap": false
       },
       "type": "rollup"
     }

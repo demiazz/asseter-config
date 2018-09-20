@@ -1,0 +1,12 @@
+{
+  "type": "object",
+  "properties": {
+    "cache": {
+      "type": "boolean"
+    },
+    "sourceMap": {
+      "type": "boolean"
+    }
+  },
+  "additionalProperties": false
+}

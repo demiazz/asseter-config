@@ -1,4 +1,4 @@
-defaultEnvironment: special
+defaultEnvironment: development
 environmentVariable: ASSETER_ENV
 packageManager: yarn
 providers:

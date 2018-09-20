@@ -57,6 +57,8 @@
     "@types/js-yaml": "3.11.2",
     "@types/node": "10.10.1",
     "ajv": "6.5.3",
+    "camel-case": "3.0.0",
+    "constant-case": "2.0.0",
     "js-yaml": "3.12.0",
     "toml": "2.3.3"
   }

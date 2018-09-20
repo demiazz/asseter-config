@@ -1,5 +1,5 @@
 {
-  "defaultEnvironment": "special",
+  "defaultEnvironment": "development",
   "environmentVariable": "ASSETER_ENV",
   "packageManager": "yarn",
   "providers": {
@@ -12,8 +12,7 @@
     },
     "landing": {
       "options": {
-        "sourceMap": false,
-        "uglify": true
+        "sourceMap": false
       },
       "type": "rollup"
     }

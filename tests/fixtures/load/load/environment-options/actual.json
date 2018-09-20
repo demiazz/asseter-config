@@ -5,30 +5,26 @@
   "providers": {
     "default": {
       "options": {
-        "shared": "unknown"
+        "cache": false,
+        "sourceMap": true
       },
       "environment": {
-        "development": {
-          "shared": "development"
-        },
         "production": {
-          "shared": "production",
-          "unique": true
+          "cache": true
+        },
+        "test": {
+          "sourceMap": false
         }
       },
       "type": "webpack"
     },
-    "landing": {
+    "mainLanding": {
       "options": {
-        "shared": "unknown"
+        "sourceMap": false
       },
       "environment": {
-        "development": {
-          "shared": "development",
-          "unique": true
-        },
-        "production": {
-          "shared": "production"
+        "special": {
+          "uglify": true
         }
       },
       "type": "rollup"

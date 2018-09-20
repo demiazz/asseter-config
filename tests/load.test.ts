@@ -8,58 +8,177 @@ import {
 } from "./helpers";
 
 describe("load", () => {
-  forEachFormat(format => {
-    describe(`when given file with '.${format}' extension`, () => {
-      it("reads a raw configuration from a file", () => {
-        const expected = getFixture(`load/valid-expected.json`);
-        const actual = load(getFixturePath(`load/valid.${format}`));
+  describe("read configuration", () => {
+    forEachFormat(format => {
+      it(`returns data from a file with extension '${format}'`, () => {
+        const fixturePath = getFixturePath(`load/load/read/actual.${format}`);
+        const expected = getFixture("load/load/read/expected.json");
 
-        expect(actual).toEqual(expected);
+        expect(load(fixturePath)).toEqual(expected);
       });
+    });
+  });
 
-      describe("when given file has a wrong format", () => {
-        const configurationPath = getFixturePath(`load/invalid.${format}`);
+  describe("validates root configuration", () => {
+    it("throws an error", () => {
+      const fixturePath = getFixturePath(
+        "load/load/root-validation/actual.json"
+      );
 
-        expect(() => load(configurationPath)).toThrowErrorMatchingSnapshot();
-      });
+      expect(() => load(fixturePath)).toThrowErrorMatchingSnapshot();
+    });
+  });
 
-      describe("with environment", () => {
-        let restoreEnvironment: () => {};
+  describe("validates providers options before processing", () => {
+    it("throws an error", () => {
+      const rollupSchemaPath = getFixturePath(
+        "load/load/loose-providers-validation/rollup-schema.json"
+      );
+      const webpackSchemaPath = getFixturePath(
+        "load/load/loose-providers-validation/webpack-schema.json"
+      );
+      const fixturePath = getFixturePath(
+        "load/load/loose-providers-validation/actual.json"
+      );
 
-        afterEach(() => {
-          if (!restoreEnvironment) {
-            return;
+      expect(() =>
+        load(fixturePath, {
+          rollup: { loose: rollupSchemaPath, strict: "" },
+          webpack: { loose: webpackSchemaPath, strict: "" }
+        })
+      ).toThrowErrorMatchingSnapshot();
+    });
+  });
+
+  describe("with an environment variable", () => {
+    let restoreEnvironment: () => void;
+
+    afterEach(() => {
+      if (restoreEnvironment) {
+        restoreEnvironment();
+      }
+    });
+
+    it("don't merge options if an environment variable isn't set", () => {
+      const fixturePath = getFixturePath("load/load/environment/actual.json");
+      const expected = getFixture(
+        "load/load/environment/expected-default.json"
+      );
+
+      expect(load(fixturePath)).toEqual(expected);
+    });
+
+    it("merge options if an environment variable is set", () => {
+      restoreEnvironment = setEnvironment({ ASSETER_ENV: "production" });
+
+      const fixturePath = getFixturePath("load/load/environment/actual.json");
+      const expected = getFixture(
+        "load/load/environment/expected-production.json"
+      );
+
+      expect(load(fixturePath)).toEqual(expected);
+    });
+  });
+
+  describe("validates providers options after merging options", () => {
+    it("throws an error", () => {
+      const looseRollupSchemaPath = getFixturePath(
+        "load/load/strict-providers-validation/loose-rollup-schema.json"
+      );
+      const strictRollupSchemaPath = getFixturePath(
+        "load/load/strict-providers-validation/strict-rollup-schema.json"
+      );
+      const looseWebpackSchemaPath = getFixturePath(
+        "load/load/strict-providers-validation/loose-webpack-schema.json"
+      );
+      const strictWebpackSchemaPath = getFixturePath(
+        "load/load/strict-providers-validation/strict-webpack-schema.json"
+      );
+      const fixturePath = getFixturePath(
+        "load/load/strict-providers-validation/actual.json"
+      );
+
+      expect(() =>
+        load(fixturePath, {
+          rollup: {
+            loose: looseRollupSchemaPath,
+            strict: strictRollupSchemaPath
+          },
+          webpack: {
+            loose: looseWebpackSchemaPath,
+            strict: strictWebpackSchemaPath
           }
+        })
+      ).toThrowErrorMatchingSnapshot();
+    });
+  });
 
-          restoreEnvironment();
-        });
+  describe("with environment variables", () => {
+    let restoreEnvironment: () => void;
 
-        describe("when environment variable is not set", () => {
-          it("merges options for default environment", () => {
-            restoreEnvironment = setEnvironment({ ASSETER_ENV: undefined });
+    afterEach(() => {
+      if (restoreEnvironment) {
+        restoreEnvironment();
+      }
+    });
 
-            const configurationPath = getFixturePath(
-              `load/environment.${format}`
-            );
-            const expected = getFixture("load/default-environment.json");
+    it("merge options from environment variables", () => {
+      restoreEnvironment = setEnvironment(getFixture(
+        "load/load/environment-options/environment.json"
+      ) as Record<string, string>);
+      const fixturePath = getFixturePath(
+        "load/load/environment-options/actual.json"
+      );
+      const expected = getFixture(
+        "load/load/environment-options/expected.json"
+      );
 
-            expect(load(configurationPath)).toEqual(expected);
-          });
-        });
+      expect(load(fixturePath)).toEqual(expected);
+    });
+  });
 
-        describe("when environment variable is set", () => {
-          it("merges options for environment", () => {
-            restoreEnvironment = setEnvironment({ ASSETER_ENV: "production" });
+  describe("validates providers options after merging environment options", () => {
+    let restoreEnvironment: () => void;
 
-            const configurationPath = getFixturePath(
-              `load/environment.${format}`
-            );
-            const expected = getFixture("load/production-environment.json");
+    afterEach(() => {
+      if (restoreEnvironment) {
+        restoreEnvironment();
+      }
+    });
 
-            expect(load(configurationPath)).toEqual(expected);
-          });
-        });
-      });
+    it("throws an error", () => {
+      restoreEnvironment = setEnvironment(getFixture(
+        "load/load/strict-environment-validation/environment.json"
+      ) as Record<string, string>);
+
+      const looseRollupSchemaPath = getFixturePath(
+        "load/load/strict-environment-validation/loose-rollup-schema.json"
+      );
+      const strictRollupSchemaPath = getFixturePath(
+        "load/load/strict-environment-validation/strict-rollup-schema.json"
+      );
+      const looseWebpackSchemaPath = getFixturePath(
+        "load/load/strict-environment-validation/loose-webpack-schema.json"
+      );
+      const strictWebpackSchemaPath = getFixturePath(
+        "load/load/strict-environment-validation/strict-webpack-schema.json"
+      );
+      const fixturePath = getFixturePath(
+        "load/load/strict-environment-validation/actual.json"
+      );
+
+      expect(() =>
+        load(fixturePath, {
+          rollup: {
+            loose: looseRollupSchemaPath,
+            strict: strictRollupSchemaPath
+          },
+          webpack: {
+            loose: looseWebpackSchemaPath,
+            strict: strictWebpackSchemaPath
+          }
+        })
+      ).toThrowErrorMatchingSnapshot();
     });
   });
 });

@@ -1,8 +1,9 @@
+import camelCase from "camel-case";
+import constantCase from "constant-case";
 import { resolve } from "path";
 
 import { JSONObject, JSONScalar, JSONValue } from "./json";
-import { read, readSchema } from "./read";
-import { reduceKeys } from "./utils";
+import { read, readSchema, readSchemas } from "./read";
 import { Errors, validate, ValidationError } from "./validate";
 
 type ProviderOptions = Record<string, JSONScalar>;
@@ -49,62 +50,187 @@ const isRawConfiguration = (
   return errors.length === 0;
 };
 
-const toProvider = (
-  { environment = {}, options, type }: RawProvider,
-  currentEnvironment: string
-): Provider => {
-  const environmentOptions = environment[currentEnvironment] || {};
+export const load = (
+  filePath: string,
+  providersSchemas?: Record<string, { loose: string; strict: string }>
+): Configuration => {
+  // Step 1: read data from a file.
 
-  return { options: { ...options, ...environmentOptions }, type };
-};
-
-const toProviders = (
-  rawProviders: RawProviders,
-  currentEnvironment: string
-): Providers => {
-  const providers = {
-    default: toProvider(rawProviders.default, currentEnvironment)
-  };
-
-  return reduceKeys<Providers>(
-    rawProviders,
-    (result, providerName) => {
-      if (providerName !== "default") {
-        const rawProvider = rawProviders[providerName];
-
-        result[providerName] = toProvider(rawProvider, currentEnvironment);
-      }
-
-      return result;
-    },
-    providers
-  );
-};
-
-const toConfiguration = ({
-  defaultEnvironment,
-  environmentVariable,
-  packageManager,
-  providers
-}: RawConfiguration): Configuration => {
-  const currentEnvironment =
-    process.env[environmentVariable] || defaultEnvironment;
-
-  return {
-    defaultEnvironment,
-    environmentVariable,
-    packageManager,
-    providers: toProviders(providers, currentEnvironment)
-  };
-};
-
-export const load = (filePath: string): Configuration => {
   const data: JSONValue = read(filePath);
-  const rawConfigurationErrors: Errors = validate(rootSchema, data);
 
-  if (!isRawConfiguration(data, rawConfigurationErrors)) {
-    throw new ValidationError(rawConfigurationErrors);
+  // Step 2: validate with root schema.
+
+  const rootErrors: Errors = validate(rootSchema, data);
+
+  if (!isRawConfiguration(data, rootErrors)) {
+    throw new ValidationError(rootErrors);
   }
 
-  return toConfiguration(data);
+  // Step 3: validate with providers schemas.
+
+  const providersNames = Object.keys(data.providers);
+
+  if (providersSchemas) {
+    const looseSchemas = Object.keys(providersSchemas).reduce<
+      Record<string, string>
+    >((result, providerName) => {
+      result[providerName] = providersSchemas[providerName].loose;
+
+      return result;
+    }, {});
+    const schemas = readSchemas(looseSchemas);
+    const providersErrors: Errors = [];
+
+    for (const providerName of providersNames) {
+      const provider = data.providers[providerName];
+      const schema = schemas[provider.type];
+
+      if (!schema) {
+        continue;
+      }
+
+      providersErrors.push(
+        ...validate(schema, data, ["providers", providerName, "options"])
+      );
+
+      if (!provider.environment) {
+        continue;
+      }
+
+      const environments = Object.keys(provider.environment);
+
+      for (const environment of environments) {
+        providersErrors.push(
+          ...validate(schema, data, [
+            "providers",
+            providerName,
+            "environment",
+            environment
+          ])
+        );
+      }
+    }
+
+    if (providersErrors.length > 0) {
+      throw new ValidationError(providersErrors);
+    }
+  }
+
+  // Step 4: merge options based on environment.
+
+  const currentEnvironment =
+    process.env[data.environmentVariable] || data.defaultEnvironment;
+
+  for (const providerName of providersNames) {
+    const provider = data.providers[providerName];
+
+    if (!provider.environment) {
+      continue;
+    }
+
+    const environmentOptions = provider.environment[currentEnvironment];
+
+    delete provider.environment;
+
+    if (environmentOptions) {
+      provider.options = { ...provider.options, ...environmentOptions };
+    }
+  }
+
+  // Step 5: validate with providers schemas.
+
+  if (providersSchemas) {
+    const strictSchemas = Object.keys(providersSchemas).reduce<
+      Record<string, string>
+    >((result, providerName) => {
+      result[providerName] = providersSchemas[providerName].strict;
+
+      return result;
+    }, {});
+    const schemas = readSchemas(strictSchemas);
+    const providersErrors: Errors = [];
+
+    for (const providerName of providersNames) {
+      const provider = data.providers[providerName];
+      const schema = schemas[provider.type];
+
+      if (!schema) {
+        continue;
+      }
+
+      providersErrors.push(
+        ...validate(schema, data, ["providers", providerName, "options"])
+      );
+    }
+
+    if (providersErrors.length > 0) {
+      throw new ValidationError(providersErrors);
+    }
+  }
+
+  // Step 6: merge options from environment variables.
+
+  for (const providerName of providersNames) {
+    const options = data.providers[providerName].options;
+    const prefix = `ASSETER_${constantCase(providerName)}_`;
+
+    Object.keys(process.env).forEach(variable => {
+      if (!variable.startsWith(prefix)) {
+        return;
+      }
+
+      const value = process.env[variable];
+
+      if (value == null) {
+        return;
+      }
+
+      const name = camelCase(variable.substr(prefix.length));
+
+      if (value === "true") {
+        options[name] = true;
+      } else if (value === "false") {
+        options[name] = false;
+      } else if (value === "null") {
+        options[name] = null;
+      } else if (/^\d+$/.test(value)) {
+        options[name] = parseInt(value, 10);
+      } else {
+        options[name] = value;
+      }
+    });
+  }
+
+  // Step 7: validate with providers schema.
+
+  if (providersSchemas) {
+    const strictSchemas = Object.keys(providersSchemas).reduce<
+      Record<string, string>
+    >((result, providerName) => {
+      result[providerName] = providersSchemas[providerName].strict;
+
+      return result;
+    }, {});
+    const schemas = readSchemas(strictSchemas);
+    const providersErrors: Errors = [];
+
+    for (const providerName of providersNames) {
+      const provider = data.providers[providerName];
+      const schema = schemas[provider.type];
+
+      if (!schema) {
+        continue;
+      }
+
+      providersErrors.push(
+        ...validate(schema, data, ["providers", providerName, "options"])
+      );
+    }
+
+    if (providersErrors.length > 0) {
+      throw new ValidationError(providersErrors);
+    }
+  }
+
+  return data;
 };
