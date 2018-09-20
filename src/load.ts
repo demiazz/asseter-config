@@ -2,6 +2,7 @@ import { resolve } from "path";
 
 import { JSONObject, JSONScalar, JSONValue } from "./json";
 import { read, readSchema } from "./read";
+import { reduceKeys } from "./utils";
 import { Errors, validate, ValidationError } from "./validate";
 
 type ProviderOptions = Record<string, JSONScalar>;
@@ -65,15 +66,19 @@ const toProviders = (
     default: toProvider(rawProviders.default, currentEnvironment)
   };
 
-  return Object.keys(rawProviders).reduce<Providers>((result, providerName) => {
-    if (providerName !== "default") {
-      const rawProvider = rawProviders[providerName];
+  return reduceKeys<Providers>(
+    rawProviders,
+    (result, providerName) => {
+      if (providerName !== "default") {
+        const rawProvider = rawProviders[providerName];
 
-      result[providerName] = toProvider(rawProvider, currentEnvironment);
-    }
+        result[providerName] = toProvider(rawProvider, currentEnvironment);
+      }
 
-    return result;
-  }, providers);
+      return result;
+    },
+    providers
+  );
 };
 
 const toConfiguration = ({

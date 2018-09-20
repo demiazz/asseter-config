@@ -5,6 +5,7 @@ import { extname } from "path";
 import { parse as parseTOML } from "toml";
 
 import { JSONValue } from "./json";
+import { reduceKeys } from "./utils";
 
 type Parser = (content: string) => JSONValue;
 
@@ -49,11 +50,15 @@ export const readSchemas = (
 ): Record<string, ValidateFunction> => {
   const schemas: Record<string, ValidateFunction> = {};
 
-  return Object.keys(definitionPaths).reduce((result, schemaName) => {
-    const definitionPath = definitionPaths[schemaName];
+  return reduceKeys(
+    definitionPaths,
+    (result, schemaName) => {
+      const definitionPath = definitionPaths[schemaName];
 
-    result[schemaName] = readSchema(definitionPath);
+      result[schemaName] = readSchema(definitionPath);
 
-    return result;
-  }, schemas);
+      return result;
+    },
+    schemas
+  );
 };
