@@ -1,0 +1,9 @@
+type = "object"
+
+[properties.isValid]
+type = "boolean"
+enum = [ true ]
+
+required = ["isValid"]
+
+additionalProperties = false
