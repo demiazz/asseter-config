@@ -1,15 +1,10 @@
 import { getByPath } from "../src/utils";
 
+import { forEachJSONType } from "./helpers";
+
 describe("getByPath", () => {
   describe("when value is not an object", () => {
-    [
-      ["array", []],
-      ["boolean", true],
-      ["null", null],
-      ["number", 0],
-      ["string", ""],
-      ["undefined", undefined]
-    ].forEach(([type, value]) => {
+    forEachJSONType((type, value) => {
       it(`throws an error when given value of ${type} type`, () => {
         expect(() => getByPath(value, [])).toThrowError(
           "Value must be an object"
