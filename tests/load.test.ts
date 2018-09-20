@@ -1,4 +1,3 @@
-import { config } from "rxjs";
 import { load } from "../src/load";
 import { getFixture, getFixturePath, setEnvironment } from "./helpers";
 
