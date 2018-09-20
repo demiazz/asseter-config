@@ -18,7 +18,7 @@ describe("load", () => {
       });
 
       describe("with environment", () => {
-        let restoreEnvironment;
+        let restoreEnvironment: () => {};
 
         afterEach(() => {
           if (!restoreEnvironment) {
