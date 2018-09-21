@@ -30,8 +30,6 @@ export const validate = (schema: ValidateFunction, data: JSONValue): Errors => {
     return [];
   }
 
-  console.log(schema.errors);
-
   const errors: Errors = [];
   const hash: Record<string, boolean> = {};
 
