@@ -1,7 +1,6 @@
-import { ErrorObject, ValidateFunction } from "ajv";
+import { ValidateFunction } from "ajv";
 
 import { JSONValue } from "./json";
-import { getByPath } from "./utils";
 
 export type Errors = Array<{ message: string; path: string }>;
 
@@ -24,21 +23,11 @@ export class ValidationError extends Error {
   }
 }
 
-const processErrors = (errors: ErrorObject[], path: string[]): Errors => {
-  const prepend = path.length > 0 ? `.${path.join(".")}` : "";
+export const validate = (schema: ValidateFunction, data: JSONValue): Errors => {
+  schema(data);
 
-  return errors.map(({ dataPath, message = "" }) => ({
+  return (schema.errors || []).map(({ dataPath: path, message = "" }) => ({
     message,
-    path: `${prepend}${dataPath}`
+    path
   }));
-};
-
-export const validate = (
-  schema: ValidateFunction,
-  data: JSONValue,
-  path: string[] = []
-): Errors => {
-  schema(getByPath(data, path));
-
-  return processErrors(schema.errors || [], path);
 };
