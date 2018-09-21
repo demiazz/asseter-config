@@ -50,6 +50,13 @@ const isRawConfiguration = (
   return errors.length === 0;
 };
 
+const getCurrentEnvironment = ({
+  defaultEnvironment,
+  environmentVariable
+}: RawConfiguration): string => {
+  return process.env[environmentVariable] || defaultEnvironment;
+};
+
 export const load = (
   filePath: string,
   providersSchemas?: Record<string, { loose: string; strict: string }>
@@ -118,8 +125,7 @@ export const load = (
 
   // Step 4: merge options based on environment.
 
-  const currentEnvironment =
-    process.env[data.environmentVariable] || data.defaultEnvironment;
+  const currentEnvironment = getCurrentEnvironment(data);
 
   for (const providerName of providersNames) {
     const provider = data.providers[providerName];
