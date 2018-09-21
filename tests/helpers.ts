@@ -3,10 +3,6 @@ import { join } from "path";
 
 import { JSONValue } from "../src/json";
 
-export const forEachFormat = (callback: (format: string) => void) => {
-  ["json"].forEach(callback);
-};
-
 export const forEachJSONType = (
   callback: (
     type: string,

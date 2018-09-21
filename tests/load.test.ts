@@ -1,22 +1,13 @@
 import { load } from "../src/load";
 
-import {
-  forEachFormat,
-  getFixture,
-  getFixturePath,
-  setEnvironment
-} from "./helpers";
+import { getFixture, getFixturePath, setEnvironment } from "./helpers";
 
 describe("load", () => {
-  describe("read configuration", () => {
-    forEachFormat(format => {
-      it(`returns data from a file with extension '${format}'`, () => {
-        const fixturePath = getFixturePath(`load/load/read/actual.${format}`);
-        const expected = getFixture("load/load/read/expected.json");
+  it("reads configuration from a file", () => {
+    const fixturePath = getFixturePath("load/load/read/actual.json");
+    const expected = getFixture("load/load/read/expected.json");
 
-        expect(load(fixturePath)).toEqual(expected);
-      });
-    });
+    expect(load(fixturePath)).toEqual(expected);
   });
 
   describe("validates root configuration", () => {
