@@ -2,7 +2,6 @@ import Ajv, { ValidateFunction } from "ajv";
 import { readFileSync } from "fs";
 
 import { JSONValue } from "./json";
-import { reduceKeys } from "./utils";
 
 export const read = (fileName: string): JSONValue => {
   const content = readFileSync(fileName, { encoding: "utf8" });
@@ -25,15 +24,11 @@ export const readSchemas = (
 ): Record<string, ValidateFunction> => {
   const schemas: Record<string, ValidateFunction> = {};
 
-  return reduceKeys(
-    definitionPaths,
-    (result, schemaName) => {
-      const definitionPath = definitionPaths[schemaName];
+  return Object.keys(definitionPaths).reduce((result, schemaName) => {
+    const definitionPath = definitionPaths[schemaName];
 
-      result[schemaName] = readSchema(definitionPath);
+    result[schemaName] = readSchema(definitionPath);
 
-      return result;
-    },
-    schemas
-  );
+    return result;
+  }, schemas);
 };
