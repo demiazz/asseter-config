@@ -1,4 +1,3 @@
-import { JSONValue } from "../src/json";
 import { read, readSchema, readSchemas } from "../src/read";
 
 import { getFixture, getFixturePath } from "./helpers";
