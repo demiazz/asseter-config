@@ -50,6 +50,13 @@ const isRawConfiguration = (
   return errors.length === 0;
 };
 
+const prefixErrors = (errors: Errors, namespace: string): Errors => {
+  return errors.map(({ message, path }) => ({
+    message,
+    path: `.${namespace}${path}`
+  }));
+};
+
 const getCurrentEnvironment = ({
   defaultEnvironment,
   environmentVariable
@@ -97,7 +104,10 @@ export const load = (
       }
 
       providersErrors.push(
-        ...validate(schema, data, ["providers", providerName, "options"])
+        ...prefixErrors(
+          validate(schema, provider.options),
+          `providers.${providerName}.options`
+        )
       );
 
       if (!provider.environment) {
@@ -108,12 +118,10 @@ export const load = (
 
       for (const environment of environments) {
         providersErrors.push(
-          ...validate(schema, data, [
-            "providers",
-            providerName,
-            "environment",
-            environment
-          ])
+          ...prefixErrors(
+            validate(schema, provider.environment),
+            `providers.${providerName}.environment.${environment}`
+          )
         );
       }
     }
@@ -165,7 +173,10 @@ export const load = (
       }
 
       providersErrors.push(
-        ...validate(schema, data, ["providers", providerName, "options"])
+        ...prefixErrors(
+          validate(schema, provider.options),
+          `providers.${providerName}.options`
+        )
       );
     }
 
@@ -229,7 +240,10 @@ export const load = (
       }
 
       providersErrors.push(
-        ...validate(schema, data, ["providers", providerName, "options"])
+        ...prefixErrors(
+          validate(schema, provider.options),
+          `providers.${providerName}.options`
+        )
       );
     }
 
