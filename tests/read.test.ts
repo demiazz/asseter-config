@@ -20,7 +20,7 @@ describe("read", () => {
       const fileName = getFixturePath("read/read/read.ini");
 
       expect(() => read(fileName)).toThrowError(
-        "Supported only JSON, YAML and TOML file types"
+        "Supported only JSON or YAML file types"
       );
     });
   });
@@ -63,7 +63,6 @@ describe("readSchemas", () => {
   it("reads and parses given JSON schemas", () => {
     const schemasPaths = {
       json: getFixturePath("read/readSchemas/actual.json"),
-      toml: getFixturePath("read/readSchemas/actual.toml"),
       yaml: getFixturePath("read/readSchemas/actual.yaml"),
       yml: getFixturePath("read/readSchemas/actual.yml")
     };

@@ -2,7 +2,6 @@ import Ajv, { ValidateFunction } from "ajv";
 import { readFileSync } from "fs";
 import { safeLoad as parseYAML } from "js-yaml";
 import { extname } from "path";
-import { parse as parseTOML } from "toml";
 
 import { JSONValue } from "./json";
 import { reduceKeys } from "./utils";
@@ -16,8 +15,6 @@ const getParser = (fileName: string): Parser | void => {
     case ".yml":
     case ".yaml":
       return parseYAML;
-    case ".toml":
-      return parseTOML;
     default:
       return undefined;
   }
@@ -27,7 +24,7 @@ export const read = (fileName: string): JSONValue => {
   const parse = getParser(fileName);
 
   if (!parse) {
-    throw new Error("Supported only JSON, YAML and TOML file types");
+    throw new Error("Supported only JSON or YAML file types");
   }
 
   const content = readFileSync(fileName, { encoding: "utf8" });
