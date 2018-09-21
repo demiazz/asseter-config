@@ -32,6 +32,26 @@ describe("validate", () => {
       }
     ]);
   });
+
+  it("returns list of unique errors when data is invalid", () => {
+    const schema = readSchema(schemaPath);
+    const data = getFixture("validate/validate/repeated.json");
+
+    expect(validate(schema, data)).toEqual([
+      {
+        message: "should NOT have additional properties",
+        path: ""
+      },
+      {
+        message: "should be string",
+        path: ".foo"
+      },
+      {
+        message: "should be string",
+        path: ".bar"
+      }
+    ]);
+  });
 });
 
 describe("ValidationError", () => {

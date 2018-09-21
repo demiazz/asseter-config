@@ -26,8 +26,28 @@ export class ValidationError extends Error {
 export const validate = (schema: ValidateFunction, data: JSONValue): Errors => {
   schema(data);
 
-  return (schema.errors || []).map(({ dataPath: path, message = "" }) => ({
-    message,
-    path
-  }));
+  if (!schema.errors) {
+    return [];
+  }
+
+  const errors: Errors = [];
+  const hash: Record<string, boolean> = {};
+
+  for (const { dataPath: path, message } of schema.errors) {
+    if (!message) {
+      continue;
+    }
+
+    const key = `${path}/${message}`;
+
+    if (hash[key]) {
+      continue;
+    }
+
+    errors.push({ path, message });
+
+    hash[key] = true;
+  }
+
+  return errors;
 };
