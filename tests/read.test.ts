@@ -9,16 +9,6 @@ describe("read", () => {
 
     expect(actual).toEqual(expected);
   });
-
-  describe("when given file of unsupported type", () => {
-    it("throws an error", () => {
-      const fileName = getFixturePath("read/read/read.yaml");
-
-      expect(() => read(fileName)).toThrowError(
-        "Supported only JSON file types"
-      );
-    });
-  });
 });
 
 describe("readSchema", () => {
