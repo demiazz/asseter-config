@@ -4,7 +4,7 @@ import { join } from "path";
 import { JSONValue } from "../src/json";
 
 export const forEachFormat = (callback: (format: string) => void) => {
-  ["json", "yaml", "yml"].forEach(callback);
+  ["json"].forEach(callback);
 };
 
 export const forEachJSONType = (

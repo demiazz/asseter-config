@@ -1,6 +1,5 @@
 import Ajv, { ValidateFunction } from "ajv";
 import { readFileSync } from "fs";
-import { safeLoad as parseYAML } from "js-yaml";
 import { extname } from "path";
 
 import { JSONValue } from "./json";
@@ -12,9 +11,6 @@ const getParser = (fileName: string): Parser | void => {
   switch (extname(fileName)) {
     case ".json":
       return JSON.parse;
-    case ".yml":
-    case ".yaml":
-      return parseYAML;
     default:
       return undefined;
   }
@@ -24,7 +20,7 @@ export const read = (fileName: string): JSONValue => {
   const parse = getParser(fileName);
 
   if (!parse) {
-    throw new Error("Supported only JSON or YAML file types");
+    throw new Error("Supported only JSON file types");
   }
 
   const content = readFileSync(fileName, { encoding: "utf8" });
