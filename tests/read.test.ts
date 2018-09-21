@@ -25,19 +25,16 @@ describe("readSchema", () => {
 describe("readSchemas", () => {
   it("reads and parses given JSON schemas", () => {
     const schemasPaths = {
-      json: getFixturePath("read/readSchemas/actual.json")
+      number: getFixturePath("read/readSchemas/number-schema.json"),
+      string: getFixturePath("read/readSchemas/string-schema.json")
     };
-    const actual = readSchemas(schemasPaths);
+    const schemas = readSchemas(schemasPaths);
+    const numberData = getFixture("read/readSchemas/number.json");
+    const stringData = getFixture("read/readSchemas/string.json");
 
-    // NOTE: use schemas' names from `schemasPaths` to ensure they are exist
-    //       in `actual`.
-    Object.keys(schemasPaths).forEach(schemaName => {
-      const valid = getFixture("read/readSchemas/valid.json");
-      const invalid = getFixture("read/readSchemas/invalid.json");
-      const validate = actual[schemaName];
-
-      expect(validate(valid)).toBe(true);
-      expect(validate(invalid)).toBe(false);
-    });
+    expect(schemas.number(numberData)).toBe(true);
+    expect(schemas.number(stringData)).toBe(false);
+    expect(schemas.string(numberData)).toBe(false);
+    expect(schemas.string(stringData)).toBe(true);
   });
 });
