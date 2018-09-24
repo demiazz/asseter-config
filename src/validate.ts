@@ -39,3 +39,37 @@ const rootSchema = readSchema(resolve(__dirname, "../schema.json"));
 
 export const validateRoot = (data: JSONValue): Errors =>
   validate(rootSchema, data);
+
+export const newValidate = (
+  schema: ValidateFunction,
+  data: JSONValue,
+  namespace?: string
+): string[] => {
+  schema(data);
+
+  if (!schema.errors) {
+    return [];
+  }
+
+  const root = namespace ? `root.${namespace}` : "root";
+  const hash: Record<string, boolean> = {};
+  const errors: string[] = [];
+
+  for (const { dataPath, message } of schema.errors) {
+    if (!message) {
+      continue;
+    }
+
+    const key = `${dataPath}/${message}`;
+
+    if (hash[key]) {
+      continue;
+    }
+
+    errors.push(`${root}${dataPath} ${message}`);
+
+    hash[key] = true;
+  }
+
+  return errors;
+};

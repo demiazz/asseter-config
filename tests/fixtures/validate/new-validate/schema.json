@@ -1,0 +1,20 @@
+{
+  "type": "object",
+  "properties": {
+    "point": {
+      "type": "object",
+      "properties": {
+        "x": {
+          "type": "number"
+        },
+        "y": {
+          "type": "number"
+        }
+      },
+      "required": ["x", "y"],
+      "additionalProperties": false
+    }
+  },
+  "required": ["point"],
+  "additionalProperties": false
+}
