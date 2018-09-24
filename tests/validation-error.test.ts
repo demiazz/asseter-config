@@ -1,5 +1,5 @@
 import { readSchema } from "../src/read";
-import { newValidate } from "../src/validate";
+import { validate } from "../src/validate";
 import { ValidationError } from "../src/validation-error";
 
 import { getFixture, getFixturePath } from "./helpers";
@@ -9,7 +9,7 @@ describe("ValidationError", () => {
     it("assembles message error from errors list", () => {
       const schema = readSchema(getFixturePath("validation-error/schema.json"));
       const data = getFixture("validation-error/invalid.json");
-      const errors = newValidate(schema, data);
+      const errors = validate(schema, data);
       const error = new ValidationError(errors);
 
       expect(error.message).toEqual(

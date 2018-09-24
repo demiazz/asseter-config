@@ -4,7 +4,7 @@ import { resolve } from "path";
 
 import { read, readSchema, readSchemas } from "./read";
 import { Configuration, JSONValue, RawConfiguration } from "./types";
-import { newValidate } from "./validate";
+import { validate } from "./validate";
 import { ValidationError } from "./validation-error";
 
 const isRawConfiguration = (
@@ -32,7 +32,7 @@ export const load = (
   // Step 2: validate with root schema.
 
   const rootSchema = readSchema(resolve(__dirname, "../new-schema.json"));
-  const rootErrors = newValidate(rootSchema, data);
+  const rootErrors = validate(rootSchema, data);
 
   if (!isRawConfiguration(data, rootErrors)) {
     throw new ValidationError(rootErrors);
@@ -62,7 +62,7 @@ export const load = (
       }
 
       providersErrors.push(
-        ...newValidate(
+        ...validate(
           schema,
           provider.options,
           `providers.${providerName}.options`
@@ -77,7 +77,7 @@ export const load = (
 
       for (const environment of environments) {
         providersErrors.push(
-          ...newValidate(
+          ...validate(
             schema,
             provider.environment[environment],
             `providers.${providerName}.environment.${environment}`
@@ -133,7 +133,7 @@ export const load = (
       }
 
       providersErrors.push(
-        ...newValidate(
+        ...validate(
           schema,
           provider.options,
           `providers.${providerName}.options`
@@ -201,7 +201,7 @@ export const load = (
       }
 
       providersErrors.push(
-        ...newValidate(
+        ...validate(
           schema,
           provider.options,
           `providers.${providerName}.options`

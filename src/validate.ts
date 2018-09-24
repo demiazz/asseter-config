@@ -2,7 +2,7 @@ import { ValidateFunction } from "ajv";
 
 import { JSONValue } from "./types";
 
-export const newValidate = (
+export const validate = (
   schema: ValidateFunction,
   data: JSONValue,
   namespace?: string

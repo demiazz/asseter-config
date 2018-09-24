@@ -25,13 +25,11 @@
   },
   "lint-staged": {
     "lib/**/*.ts": [
-      "test",
       "prettier --write",
       "tslint",
       "git add"
     ],
     "tests/**/*.ts": [
-      "test",
       "prettier --write",
       "tslint",
       "git add"
