@@ -1,13 +1,11 @@
-import { Errors } from "./validate";
-
 export class ValidationError extends Error {
-  constructor(errors: Errors) {
+  constructor(errors: string[]) {
     super();
 
     this.message = errors
       .reduce(
-        (messages, { message, path }) => {
-          messages.push(`  root${path} ${message}`.trimRight());
+        (messages, error) => {
+          messages.push(`  ${error}`);
 
           return messages;
         },
