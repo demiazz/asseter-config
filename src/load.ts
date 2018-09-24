@@ -4,7 +4,8 @@ import { resolve } from "path";
 
 import { read, readSchema, readSchemas } from "./read";
 import { Configuration, JSONValue, RawConfiguration } from "./types";
-import { Errors, validate, ValidationError } from "./validate";
+import { Errors, validate } from "./validate";
+import { ValidationError } from "./validation-error";
 
 const rootSchema = readSchema(resolve(__dirname, "../schema.json"));
 
