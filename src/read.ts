@@ -1,7 +1,7 @@
 import Ajv, { ValidateFunction } from "ajv";
 import { readFileSync } from "fs";
 
-import { JSONValue } from "./json";
+import { JSONValue } from "./types";
 
 export const read = (fileName: string): JSONValue => {
   const content = readFileSync(fileName, { encoding: "utf8" });

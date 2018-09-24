@@ -1,6 +1,6 @@
 import { ValidateFunction } from "ajv";
 
-import { JSONValue } from "./json";
+import { JSONValue } from "./types";
 
 export type Errors = Array<{ message: string; path: string }>;
 

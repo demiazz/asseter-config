@@ -2,44 +2,9 @@ import camelCase from "camel-case";
 import constantCase from "constant-case";
 import { resolve } from "path";
 
-import { JSONObject, JSONScalar, JSONValue } from "./json";
 import { read, readSchema, readSchemas } from "./read";
+import { Configuration, JSONValue, RawConfiguration } from "./types";
 import { Errors, validate, ValidationError } from "./validate";
-
-type ProviderOptions = Record<string, JSONScalar>;
-
-interface Provider {
-  options: ProviderOptions;
-  type: string;
-}
-
-interface Providers extends Record<string, Provider> {
-  default: Provider;
-}
-
-interface Configuration {
-  defaultEnvironment: string;
-  environmentVariable: string;
-  packageManager: "npm" | "yarn";
-  providers: Providers;
-}
-
-interface RawProvider extends JSONObject {
-  environment?: Record<string, ProviderOptions>;
-  options: ProviderOptions;
-  type: string;
-}
-
-interface RawProviders extends Record<string, RawProvider> {
-  default: RawProvider;
-}
-
-interface RawConfiguration extends JSONObject {
-  defaultEnvironment: string;
-  environmentVariable: string;
-  packageManager: "npm" | "yarn";
-  providers: RawProviders;
-}
 
 const rootSchema = readSchema(resolve(__dirname, "../schema.json"));
 

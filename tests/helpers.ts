@@ -1,7 +1,7 @@
 import { readFileSync } from "fs";
 import { join } from "path";
 
-import { JSONValue } from "../src/json";
+import { JSONValue } from "../src/types";
 
 export const forEachJSONType = (
   callback: (
