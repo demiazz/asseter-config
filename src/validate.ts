@@ -1,7 +1,5 @@
 import { ValidateFunction } from "ajv";
-import { resolve } from "path";
 
-import { readSchema } from "./read";
 import { JSONValue } from "./types";
 
 export type Errors = Array<{ message: string; path: string }>;
@@ -34,11 +32,6 @@ export const validate = (schema: ValidateFunction, data: JSONValue): Errors => {
 
   return errors;
 };
-
-const rootSchema = readSchema(resolve(__dirname, "../schema.json"));
-
-export const validateRoot = (data: JSONValue): Errors =>
-  validate(rootSchema, data);
 
 export const newValidate = (
   schema: ValidateFunction,
