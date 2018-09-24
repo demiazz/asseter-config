@@ -1,23 +1,17 @@
 import camelCase from "camel-case";
 import constantCase from "constant-case";
+import { resolve } from "path";
 
-import { read, readSchemas } from "./read";
+import { read, readSchema, readSchemas } from "./read";
 import { Configuration, JSONValue, RawConfiguration } from "./types";
-import { Errors, validate, validateRoot } from "./validate";
+import { newValidate } from "./validate";
 import { ValidationError } from "./validation-error";
 
 const isRawConfiguration = (
   _: JSONValue,
-  errors: Errors
+  errors: string[]
 ): _ is RawConfiguration => {
   return errors.length === 0;
-};
-
-const prefixErrors = (errors: Errors, namespace: string): Errors => {
-  return errors.map(({ message, path }) => ({
-    message,
-    path: `.${namespace}${path}`
-  }));
 };
 
 const getCurrentEnvironment = ({
@@ -37,7 +31,8 @@ export const load = (
 
   // Step 2: validate with root schema.
 
-  const rootErrors: Errors = validateRoot(data);
+  const rootSchema = readSchema(resolve(__dirname, "../new-schema.json"));
+  const rootErrors = newValidate(rootSchema, data);
 
   if (!isRawConfiguration(data, rootErrors)) {
     throw new ValidationError(rootErrors);
@@ -56,7 +51,7 @@ export const load = (
       return result;
     }, {});
     const schemas = readSchemas(looseSchemas);
-    const providersErrors: Errors = [];
+    const providersErrors: string[] = [];
 
     for (const providerName of providersNames) {
       const provider = data.providers[providerName];
@@ -67,8 +62,9 @@ export const load = (
       }
 
       providersErrors.push(
-        ...prefixErrors(
-          validate(schema, provider.options),
+        ...newValidate(
+          schema,
+          provider.options,
           `providers.${providerName}.options`
         )
       );
@@ -81,8 +77,9 @@ export const load = (
 
       for (const environment of environments) {
         providersErrors.push(
-          ...prefixErrors(
-            validate(schema, provider.environment),
+          ...newValidate(
+            schema,
+            provider.environment[environment],
             `providers.${providerName}.environment.${environment}`
           )
         );
@@ -125,7 +122,7 @@ export const load = (
       return result;
     }, {});
     const schemas = readSchemas(strictSchemas);
-    const providersErrors: Errors = [];
+    const providersErrors: string[] = [];
 
     for (const providerName of providersNames) {
       const provider = data.providers[providerName];
@@ -136,8 +133,9 @@ export const load = (
       }
 
       providersErrors.push(
-        ...prefixErrors(
-          validate(schema, provider.options),
+        ...newValidate(
+          schema,
+          provider.options,
           `providers.${providerName}.options`
         )
       );
@@ -192,7 +190,7 @@ export const load = (
       return result;
     }, {});
     const schemas = readSchemas(strictSchemas);
-    const providersErrors: Errors = [];
+    const providersErrors: string[] = [];
 
     for (const providerName of providersNames) {
       const provider = data.providers[providerName];
@@ -203,8 +201,9 @@ export const load = (
       }
 
       providersErrors.push(
-        ...prefixErrors(
-          validate(schema, provider.options),
+        ...newValidate(
+          schema,
+          provider.options,
           `providers.${providerName}.options`
         )
       );

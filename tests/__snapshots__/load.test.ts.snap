@@ -23,10 +23,13 @@ exports[`load validates providers options before processing throws an error 1`] 
   root.providers.default.options.cache should be boolean
   root.providers.default.options.sourceMap should be boolean
   root.providers.default.environment.production should NOT have additional properties
+  root.providers.default.environment.production.cache should be boolean
   root.providers.default.environment.test should NOT have additional properties
+  root.providers.default.environment.test.sourceMap should be boolean
   root.providers.landing.options should NOT have additional properties
   root.providers.landing.options.sourceMap should be boolean
-  root.providers.landing.environment.special should NOT have additional properties"
+  root.providers.landing.environment.special should NOT have additional properties
+  root.providers.landing.environment.special.uglify should be boolean"
 `;
 
 exports[`load validates root configuration throws an error 1`] = `
