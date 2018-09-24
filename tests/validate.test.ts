@@ -1,5 +1,5 @@
 import { readSchema } from "../src/read";
-import { validate } from "../src/validate";
+import { validate, validateRoot } from "../src/validate";
 
 import { getFixture, getFixturePath } from "./helpers";
 
@@ -51,5 +51,40 @@ describe("validate", () => {
         path: ".bar"
       }
     ]);
+  });
+});
+
+describe("validateRoot", () => {
+  describe("when given data is valid", () => {
+    it("returns empty errors list", () => {
+      const data = getFixture("validate/validate-root/valid.json");
+
+      expect(validateRoot(data)).toEqual([]);
+    });
+  });
+
+  describe("when given data is invalid", () => {
+    it("returns errors list", () => {
+      const data = getFixture("validate/validate-root/invalid.json");
+
+      expect(validateRoot(data)).toEqual([
+        {
+          message: "should have required property 'defaultEnvironment'",
+          path: ""
+        },
+        {
+          message: "should have required property 'environmentVariable'",
+          path: ""
+        },
+        {
+          message: "should have required property 'packageManager'",
+          path: ""
+        },
+        {
+          message: "should have required property 'providers'",
+          path: ""
+        }
+      ]);
+    });
   });
 });

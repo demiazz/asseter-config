@@ -1,0 +1,15 @@
+{
+  "defaultEnvironment": "development",
+  "environmentVariable": "ASSETER_ENV",
+  "packageManager": "yarn",
+  "providers": {
+    "default": {
+      "options": {},
+      "type": "asseter"
+    },
+    "secondary": {
+      "options": {},
+      "type": "asseter"
+    }
+  }
+}

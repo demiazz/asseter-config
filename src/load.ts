@@ -1,13 +1,10 @@
 import camelCase from "camel-case";
 import constantCase from "constant-case";
-import { resolve } from "path";
 
-import { read, readSchema, readSchemas } from "./read";
+import { read, readSchemas } from "./read";
 import { Configuration, JSONValue, RawConfiguration } from "./types";
-import { Errors, validate } from "./validate";
+import { Errors, validate, validateRoot } from "./validate";
 import { ValidationError } from "./validation-error";
-
-const rootSchema = readSchema(resolve(__dirname, "../schema.json"));
 
 const isRawConfiguration = (
   _: JSONValue,
@@ -40,7 +37,7 @@ export const load = (
 
   // Step 2: validate with root schema.
 
-  const rootErrors: Errors = validate(rootSchema, data);
+  const rootErrors: Errors = validateRoot(data);
 
   if (!isRawConfiguration(data, rootErrors)) {
     throw new ValidationError(rootErrors);
