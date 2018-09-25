@@ -1,12 +1,12 @@
-const isOctal = (value: string): boolean => /^\-?0\d+$/.test(value);
+const isOctal = (value: string): boolean => /^[-+]?0\d+$/.test(value);
 
 const isHexadecimal = (value: string): boolean =>
-  /^\-?0(x|X)[0-9A-Fa-f]+$/.test(value);
+  /^[-+]?0(x|X)[0-9A-Fa-f]+$/.test(value);
 
-const isDecimal = (value: string): boolean => /^\-?\d+$/.test(value);
+const isDecimal = (value: string): boolean => /^[-+]?\d+$/.test(value);
 
 const isFloat = (value: string): boolean =>
-  /^[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$/.test(value);
+  /^[-+]?\d*\.?\d+([eE][-+]?\d+)?$/.test(value);
 
 export const parse = (value: string): boolean | null | number | string => {
   if (value === "true") {
