@@ -2,6 +2,7 @@ import camelCase from "camel-case";
 import constantCase from "constant-case";
 import { resolve } from "path";
 
+import { ValidateFunction } from "ajv";
 import { read, readSchema } from "./read";
 import { Configuration, JSONValue, RawConfiguration } from "./types";
 import { validate } from "./validate";
@@ -12,6 +13,58 @@ const isRawConfiguration = (
   errors: string[]
 ): _ is RawConfiguration => {
   return errors.length === 0;
+};
+
+const looseValidate = (
+  { providers }: RawConfiguration,
+  schema: ValidateFunction
+): string[] => {
+  const providersNames = Object.keys(providers);
+  const errors: string[] = [];
+
+  for (const providerName of providersNames) {
+    const { options, environment } = providers[providerName];
+
+    errors.push(
+      ...validate(schema, options, `providers.${providerName}.options`)
+    );
+
+    if (!environment) {
+      continue;
+    }
+
+    const environmentsNames = Object.keys(environment);
+
+    for (const environmentName of environmentsNames) {
+      errors.push(
+        ...validate(
+          schema,
+          environment[environmentName],
+          `providers.${providerName}.environment.${environmentName}`
+        )
+      );
+    }
+  }
+
+  return errors;
+};
+
+const strictValidate = (
+  { providers }: RawConfiguration,
+  schema: ValidateFunction
+): string[] => {
+  const providersNames = Object.keys(providers);
+  const errors: string[] = [];
+
+  for (const providerName of providersNames) {
+    const { options } = providers[providerName];
+
+    errors.push(
+      ...validate(schema, options, `providers.${providerName}.options`)
+    );
+  }
+
+  return errors;
 };
 
 export const load = (
@@ -56,36 +109,7 @@ export const load = (
 
   // 7. validate options with the loose schema.
 
-  const providersNames = Object.keys(data.providers);
-  const looseErrors: string[] = [];
-
-  for (const providerName of providersNames) {
-    const provider = data.providers[providerName];
-
-    looseErrors.push(
-      ...validate(
-        looseSchema,
-        provider.options,
-        `providers.${providerName}.options`
-      )
-    );
-
-    if (!provider.environment) {
-      continue;
-    }
-
-    const environments = Object.keys(provider.environment);
-
-    for (const environment of environments) {
-      looseErrors.push(
-        ...validate(
-          looseSchema,
-          provider.environment[environment],
-          `providers.${providerName}.environment.${environment}`
-        )
-      );
-    }
-  }
+  const looseErrors = looseValidate(data, looseSchema);
 
   // 8. if errors then throw exception.
 
@@ -99,6 +123,8 @@ export const load = (
     process.env[data.environmentVariable] || data.defaultEnvironment;
 
   // 10. merge options based on environment.
+
+  const providersNames = Object.keys(data.providers);
 
   for (const providerName of providersNames) {
     const provider = data.providers[providerName];
@@ -124,19 +150,7 @@ export const load = (
 
   // 12. validate options with the strict schema.
 
-  const mergeErrors: string[] = [];
-
-  for (const providerName of providersNames) {
-    const provider = data.providers[providerName];
-
-    mergeErrors.push(
-      ...validate(
-        strictSchema,
-        provider.options,
-        `providers.${providerName}.options`
-      )
-    );
-  }
+  const mergeErrors = strictValidate(data, strictSchema);
 
   // 13. if errors then throw exception.
 
@@ -179,19 +193,7 @@ export const load = (
 
   // 15. validate options with the strict schema.
 
-  const environmentErrors: string[] = [];
-
-  for (const providerName of providersNames) {
-    const provider = data.providers[providerName];
-
-    environmentErrors.push(
-      ...validate(
-        strictSchema,
-        provider.options,
-        `providers.${providerName}.options`
-      )
-    );
-  }
+  const environmentErrors = strictValidate(data, strictSchema);
 
   // 16. if errors then throw exception.
 
