@@ -26,7 +26,7 @@ export const load = (
 
   // 2. load root schema.
 
-  const rootSchema = readSchema(resolve(__dirname, "../new-schema.json"));
+  const rootSchema = readSchema(resolve(__dirname, "../schema.json"));
 
   // 3. validate a file with the root schema.
 

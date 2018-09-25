@@ -44,12 +44,6 @@
     },
     "providers": {
       "type": "object",
-      "properties": {
-        "default": {
-          "$ref": "#/definitions/provider"
-        }
-      },
-      "required": ["default"],
       "additionalProperties": {
         "$ref": "#/definitions/provider"
       }
