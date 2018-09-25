@@ -39,3 +39,43 @@ exports[`load validates root configuration throws an error 1`] = `
   root should have required property 'packageManager'
   root should have required property 'providers'"
 `;
+
+exports[`loadProvider loose validation throws an error when data is invalid 1`] = `
+"Invalid configuration:
+  root.providers.user-interface.options.cache should be string
+  root.providers.user-interface.options.sourceMap should be string
+  root.providers.user-interface.environment.production.cache should be string
+  root.providers.user-interface.environment.production.sourceMap should be string
+  root.providers.user-interface.environment.development.sourceMap should be string
+  root.providers.user-interface.environment.test.cache should be string
+  root.providers.landing-interface.options.cache should be string
+  root.providers.landing-interface.options.sourceMap should be string
+  root.providers.landing-interface.environment.production.cache should be string
+  root.providers.landing-interface.environment.production.sourceMap should be string
+  root.providers.landing-interface.environment.development.sourceMap should be string
+  root.providers.landing-interface.environment.test.cache should be string"
+`;
+
+exports[`loadProvider root validation throws an error when configuration is invalid 1`] = `
+"Invalid configuration:
+  root should have required property 'defaultEnvironment'
+  root should have required property 'environmentVariable'
+  root should have required property 'packageManager'
+  root should have required property 'providers'"
+`;
+
+exports[`loadProvider strict validation after environment merge merges environment variables as options 1`] = `
+"Invalid configuration:
+  root.providers.user-interface.options should NOT have additional properties
+  root.providers.user-interface.options.cache should be boolean
+  root.providers.user-interface.options.sourceMap should be boolean
+  root.providers.landing-interface.options should NOT have additional properties
+  root.providers.landing-interface.options.cache should be boolean
+  root.providers.landing-interface.options.sourceMap should be boolean"
+`;
+
+exports[`loadProvider strict validation after options merge throws an error when data is invalid 1`] = `
+"Invalid configuration:
+  root.providers.user-interface.options should NOT have additional properties
+  root.providers.landing-interface.options should NOT have additional properties"
+`;

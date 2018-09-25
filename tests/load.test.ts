@@ -1,4 +1,4 @@
-import { load } from "../src/load";
+import { load, loadProvider } from "../src/load";
 
 import { getFixture, getFixturePath, setEnvironment } from "./helpers";
 
@@ -170,6 +170,134 @@ describe("load", () => {
           }
         })
       ).toThrowErrorMatchingSnapshot();
+    });
+  });
+});
+
+describe("loadProvider", () => {
+  const data = getFixturePath("load/load-provider/data.json");
+  const looseSchema = getFixturePath("load/load-provider/loose-schema.json");
+  const strictSchema = getFixturePath("load/load-provider/strict-schema.json");
+
+  let restoreEnvironment: void | (() => void);
+
+  afterEach(() => {
+    if (restoreEnvironment) {
+      restoreEnvironment();
+
+      restoreEnvironment = undefined;
+    }
+  });
+
+  it("reads configuration from a file", () => {
+    const expected = getFixture("load/load-provider/read/expected.json");
+
+    expect(loadProvider(data, "webpack", looseSchema, strictSchema)).toEqual(
+      expected
+    );
+  });
+
+  describe("root validation", () => {
+    it("throws an error when configuration is invalid", () => {
+      const actual = getFixturePath(
+        "load/load-provider/root-validation/actual.json"
+      );
+      expect(() =>
+        loadProvider(actual, "webpack", looseSchema, strictSchema)
+      ).toThrowErrorMatchingSnapshot();
+    });
+  });
+
+  describe("loose validation", () => {
+    it("throws an error when data is invalid", () => {
+      const actualLooseSchema = getFixturePath(
+        "load/load-provider/loose-validation/loose-schema.json"
+      );
+
+      expect(() => {
+        loadProvider(data, "webpack", actualLooseSchema, strictSchema);
+      }).toThrowErrorMatchingSnapshot();
+    });
+  });
+
+  describe("options merge", () => {
+    describe("when environment variable do not exist", () => {
+      it("merge options based on default environment", () => {
+        const expected = getFixture(
+          "load/load-provider/options-merge/default-expected.json"
+        );
+
+        expect(
+          loadProvider(data, "webpack", looseSchema, strictSchema)
+        ).toEqual(expected);
+      });
+    });
+
+    describe("when environment variable is exist", () => {
+      it("merge options based on environment variable", () => {
+        restoreEnvironment = setEnvironment({
+          ASSETER_ENV: "production"
+        });
+
+        const expected = getFixture(
+          "load/load-provider/options-merge/variable-expected.json"
+        );
+
+        expect(
+          loadProvider(data, "webpack", looseSchema, strictSchema)
+        ).toEqual(expected);
+      });
+    });
+  });
+
+  describe("strict validation after options merge", () => {
+    it("throws an error when data is invalid", () => {
+      restoreEnvironment = setEnvironment({
+        ASSETER_ENV: "invalid"
+      });
+
+      const actual = getFixturePath(
+        "load/load-provider/options-strict-validation/actual.json"
+      );
+
+      expect(() => {
+        loadProvider(actual, "webpack", looseSchema, strictSchema);
+      }).toThrowErrorMatchingSnapshot();
+    });
+  });
+
+  describe("environment merge", () => {
+    it("merges environment variables as options", () => {
+      restoreEnvironment = setEnvironment(getFixture(
+        "load/load-provider/environment-merge/environment.json"
+      ) as Record<string, string>);
+
+      const emptySchema = getFixturePath(
+        "load/load-provider/environment-merge/empty-schema.json"
+      );
+      const expected = getFixture(
+        "load/load-provider/environment-merge/expected.json"
+      );
+
+      expect(loadProvider(data, "webpack", emptySchema, emptySchema)).toEqual(
+        expected
+      );
+    });
+  });
+
+  describe("strict validation after environment merge", () => {
+    it("merges environment variables as options", () => {
+      restoreEnvironment = setEnvironment(getFixture(
+        "load/load-provider/environment-strict-validation/environment.json"
+      ) as Record<string, string>);
+
+      const emptySchema = getFixturePath(
+        "load/load-provider/environment-strict-validation/empty-schema.json"
+      );
+
+      expect(() => {
+        loadProvider(data, "webpack", emptySchema, strictSchema);
+      }).toThrowErrorMatchingSnapshot();
     });
   });
 });

@@ -1,0 +1,29 @@
+{
+  "defaultEnvironment": "development",
+  "environmentVariable": "ASSETER_ENV",
+  "packageManager": "yarn",
+  "providers": {
+    "user-interface": {
+      "options": {
+        "boolean": true,
+        "cache": true,
+        "null": null,
+        "number": 42,
+        "sourceMap": false,
+        "string": "this is string"
+      },
+      "type": "webpack"
+    },
+    "landing-interface": {
+      "options": {
+        "boolean": false,
+        "cache": true,
+        "null": null,
+        "number": 24,
+        "sourceMap": true,
+        "string": "string is this"
+      },
+      "type": "webpack"
+    }
+  }
+}

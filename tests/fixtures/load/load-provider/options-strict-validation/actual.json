@@ -1,0 +1,83 @@
+{
+  "defaultEnvironment": "development",
+  "environmentVariable": "ASSETER_ENV",
+  "packageManager": "yarn",
+  "providers": {
+    "user-interface": {
+      "options": {
+        "cache": false,
+        "sourceMap": false
+      },
+      "environment": {
+        "production": {
+          "cache": true,
+          "sourceMap": true
+        },
+        "development": {
+          "sourceMap": true
+        },
+        "test": {
+          "cache": true
+        },
+        "invalid": {
+          "cache": true,
+          "sourceMap": true,
+          "additional": false
+        }
+      },
+      "type": "webpack"
+    },
+    "landing-interface": {
+      "options": {
+        "cache": false,
+        "sourceMap": false
+      },
+      "environment": {
+        "production": {
+          "cache": true,
+          "sourceMap": true
+        },
+        "development": {
+          "sourceMap": true
+        },
+        "test": {
+          "cache": true
+        },
+        "invalid": {
+          "cache": true,
+          "sourceMap": true,
+          "additional": false
+        }
+      },
+      "type": "webpack"
+    },
+    "admin-interface": {
+      "options": {
+        "sourceMap": false
+      },
+      "environment": {
+        "production": {
+          "sourceMap": true
+        },
+        "development": {
+          "sourceMap": true
+        }
+      },
+      "type": "rollup"
+    },
+    "billing-interface": {
+      "options": {
+        "sourceMap": false
+      },
+      "environment": {
+        "production": {
+          "sourceMap": true
+        },
+        "development": {
+          "sourceMap": true
+        }
+      },
+      "type": "rollup"
+    }
+  }
+}
