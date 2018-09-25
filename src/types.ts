@@ -14,9 +14,7 @@ interface RawProvider extends JSONObject {
   type: string;
 }
 
-interface RawProviders extends Record<string, RawProvider> {
-  default: RawProvider;
-}
+type RawProviders = Record<string, RawProvider>;
 
 export interface RawConfiguration extends JSONObject {
   defaultEnvironment: string;
@@ -30,9 +28,7 @@ interface Provider {
   type: string;
 }
 
-interface Providers extends Record<string, Provider> {
-  default: Provider;
-}
+type Providers = Record<string, Provider>;
 
 export interface Configuration {
   defaultEnvironment: string;
