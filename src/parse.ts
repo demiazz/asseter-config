@@ -11,17 +11,29 @@ const isFloat = (value: string): boolean =>
 export const parse = (value: string): boolean | null | number | string => {
   if (value === "true") {
     return true;
-  } else if (value === "false") {
+  }
+
+  if (value === "false") {
     return false;
-  } else if (value === "null") {
+  }
+
+  if (value === "null") {
     return null;
-  } else if (isOctal(value)) {
+  }
+
+  if (isOctal(value)) {
     return parseInt(value, 8);
-  } else if (isHexadecimal(value)) {
+  }
+
+  if (isHexadecimal(value)) {
     return parseInt(value, 16);
-  } else if (isDecimal(value)) {
+  }
+
+  if (isDecimal(value)) {
     return parseInt(value, 10);
-  } else if (isFloat(value)) {
+  }
+
+  if (isFloat(value)) {
     return parseFloat(value);
   }
 
