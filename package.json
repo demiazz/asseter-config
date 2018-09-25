@@ -52,8 +52,8 @@
     "typescript": "3.0.3"
   },
   "dependencies": {
-    "@types/node": "10.10.1",
-    "ajv": "6.5.3",
+    "@types/node": "10.11.0",
+    "ajv": "6.5.4",
     "camel-case": "3.0.0",
     "constant-case": "2.0.0"
   }
