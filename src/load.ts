@@ -1,8 +1,9 @@
+import { ValidateFunction } from "ajv";
 import camelCase from "camel-case";
 import constantCase from "constant-case";
 import { resolve } from "path";
 
-import { ValidateFunction } from "ajv";
+import { parse } from "./parse";
 import { read, readSchema } from "./read";
 import { Configuration, JSONValue, RawConfiguration } from "./types";
 import { validate } from "./validate";
@@ -177,17 +178,7 @@ export const load = (
 
       const name = camelCase(variable.substr(prefix.length));
 
-      if (value === "true") {
-        options[name] = true;
-      } else if (value === "false") {
-        options[name] = false;
-      } else if (value === "null") {
-        options[name] = null;
-      } else if (/^\d+$/.test(value)) {
-        options[name] = parseInt(value, 10);
-      } else {
-        options[name] = value;
-      }
+      options[name] = parse(value);
     });
   }
 
