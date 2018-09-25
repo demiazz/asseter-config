@@ -1,4 +1,4 @@
-import { read, readSchema, readSchemas } from "../src/read";
+import { read, readSchema } from "../src/read";
 
 import { getFixture, getFixturePath } from "./helpers";
 
@@ -19,22 +19,5 @@ describe("readSchema", () => {
 
     expect(schema(valid)).toBe(true);
     expect(schema(invalid)).toBe(false);
-  });
-});
-
-describe("readSchemas", () => {
-  it("reads and parses given JSON schemas", () => {
-    const schemasPaths = {
-      number: getFixturePath("read/readSchemas/number-schema.json"),
-      string: getFixturePath("read/readSchemas/string-schema.json")
-    };
-    const schemas = readSchemas(schemasPaths);
-    const numberData = getFixture("read/readSchemas/number.json");
-    const stringData = getFixture("read/readSchemas/string.json");
-
-    expect(schemas.number(numberData)).toBe(true);
-    expect(schemas.number(stringData)).toBe(false);
-    expect(schemas.string(numberData)).toBe(false);
-    expect(schemas.string(stringData)).toBe(true);
   });
 });
