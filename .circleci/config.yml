@@ -79,7 +79,7 @@ jobs:
           at: .
       - run:
           name: Build
-          command: yarn build
+          command: yarn version
 
   test:
     <<: *defaults
