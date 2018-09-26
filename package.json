@@ -24,10 +24,10 @@
     "email": "demiazz.py@gmail.com"
   },
   "scripts": {
-    "build": "rimraf lib && rimraf typings && tsc && prettier --write ./{lib,typings}/*.js",
     "lint": "tslint --project .",
     "lint-staged": "lint-staged",
-    "test": "jest"
+    "test": "jest",
+    "version": "rimraf lib && rimraf typings && tsc && prettier --write ./{lib,typings}/*.js"
   },
   "lint-staged": {
     "lib/**/*.ts": [
