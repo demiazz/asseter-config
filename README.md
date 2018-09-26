@@ -12,10 +12,20 @@
 <br />
 
 <div align="center">
+  <!-- NPM version -->
+  <a href="https://www.npmjs.com/package/@asseter/config">
+    <img src="https://img.shields.io/npm/v/lighty.svg?style=flat-square"
+      alt="NPM version" />
+  </a>
   <!-- Build Status -->
   <a href="https://circleci.com/gh/demiazz/workflows/asseter-config">
     <img src="https://img.shields.io/circleci/project/github/demiazz/asseter-config/master.svg?style=flat-square"
       alt="Build Status" />
+  </a>
+  <!-- License -->
+  <a href="https://github.com/demiazz/asseter-config/blob/master/LICENSE">
+    <img src="https://img.shields.io/npm/l/lighty.svg?style=flat-square"
+      alt="License" />
   </a>
 </div>
 
