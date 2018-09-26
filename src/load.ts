@@ -1,9 +1,7 @@
 import { ValidateFunction } from "ajv";
-import camelCase from "camel-case";
-import constantCase from "constant-case";
 import { resolve } from "path";
 
-import { parse } from "./parse";
+import { extractFromEnvironment } from "./environment";
 import { read, readSchema } from "./read";
 import { Configuration, JSONValue, RawConfiguration } from "./types";
 import { validate } from "./validate";
@@ -19,7 +17,7 @@ const isRawConfiguration = (
 const looseValidate = (
   { providers }: RawConfiguration,
   schema: ValidateFunction
-): string[] => {
+): void => {
   const providersNames = Object.keys(providers);
   const errors: string[] = [];
 
@@ -47,13 +45,15 @@ const looseValidate = (
     }
   }
 
-  return errors;
+  if (errors.length > 0) {
+    throw new ValidationError(errors);
+  }
 };
 
 const strictValidate = (
   { providers }: RawConfiguration,
   schema: ValidateFunction
-): string[] => {
+): void => {
   const providersNames = Object.keys(providers);
   const errors: string[] = [];
 
@@ -65,7 +65,9 @@ const strictValidate = (
     );
   }
 
-  return errors;
+  if (errors.length > 0) {
+    throw new ValidationError(errors);
+  }
 };
 
 export const load = (
@@ -74,25 +76,16 @@ export const load = (
   looseSchemaPath: string,
   strictSchemaPath: string
 ): Configuration => {
-  // 1. read data from a file.
-
   const data = read(configurationPath);
-
-  // 2. load root schema.
-
   const rootSchema = readSchema(resolve(__dirname, "../schema.json"));
-
-  // 3. validate a file with the root schema.
+  const looseSchema = readSchema(looseSchemaPath);
+  const strictSchema = readSchema(strictSchemaPath);
 
   const rootErrors = validate(rootSchema, data);
-
-  // 4. if errors then throw exception.
 
   if (!isRawConfiguration(data, rootErrors)) {
     throw new ValidationError(rootErrors);
   }
-
-  // 5. filter providers by types.
 
   const allProvidersNames = Object.keys(data.providers);
 
@@ -104,26 +97,10 @@ export const load = (
     }
   }
 
-  // 6. load loose schema.
-
-  const looseSchema = readSchema(looseSchemaPath);
-
-  // 7. validate options with the loose schema.
-
-  const looseErrors = looseValidate(data, looseSchema);
-
-  // 8. if errors then throw exception.
-
-  if (looseErrors.length > 0) {
-    throw new ValidationError(looseErrors);
-  }
-
-  // 9. detect current environment.
+  looseValidate(data, looseSchema);
 
   const currentEnvironment =
     process.env[data.environmentVariable] || data.defaultEnvironment;
-
-  // 10. merge options based on environment.
 
   const providersNames = Object.keys(data.providers);
 
@@ -145,54 +122,16 @@ export const load = (
     delete provider.environment;
   }
 
-  // 11. load strict schema.
-
-  const strictSchema = readSchema(strictSchemaPath);
-
-  // 12. validate options with the strict schema.
-
-  const mergeErrors = strictValidate(data, strictSchema);
-
-  // 13. if errors then throw exception.
-
-  if (mergeErrors.length > 0) {
-    throw new ValidationError(mergeErrors);
-  }
-
-  // 14. merge options from environment variables.
+  strictValidate(data, strictSchema);
 
   for (const providerName of providersNames) {
-    const options = data.providers[providerName].options;
-    const prefix = `ASSETER_${constantCase(providerName)}_`;
+    const provider = data.providers[providerName];
+    const environmentOptions = extractFromEnvironment(providerName);
 
-    Object.keys(process.env).forEach(variable => {
-      if (!variable.startsWith(prefix)) {
-        return;
-      }
-
-      const value = process.env[variable];
-
-      if (value == null) {
-        return;
-      }
-
-      const name = camelCase(variable.substr(prefix.length));
-
-      options[name] = parse(value);
-    });
+    provider.options = { ...provider.options, ...environmentOptions };
   }
 
-  // 15. validate options with the strict schema.
-
-  const environmentErrors = strictValidate(data, strictSchema);
-
-  // 16. if errors then throw exception.
-
-  if (environmentErrors.length > 0) {
-    throw new ValidationError(environmentErrors);
-  }
-
-  // 17. return result.
+  strictValidate(data, strictSchema);
 
   return data;
 };

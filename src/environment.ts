@@ -1,3 +1,8 @@
+import camelCase from "camel-case";
+import constantCase from "constant-case";
+
+import { JSONScalar } from "./types";
+
 const isOctal = (value: string): boolean => /^[-+]?0\d+$/.test(value);
 
 const isHexadecimal = (value: string): boolean =>
@@ -38,4 +43,29 @@ export const parse = (value: string): boolean | null | number | string => {
   }
 
   return value;
+};
+
+export const extractFromEnvironment = (
+  namespace: string
+): Record<string, JSONScalar> => {
+  const prefix = `ASSETER_${constantCase(namespace)}_`;
+  const variables: Record<string, JSONScalar> = {};
+
+  for (const variableName of Object.keys(process.env)) {
+    if (!variableName.startsWith(prefix)) {
+      continue;
+    }
+
+    const value = process.env[variableName];
+
+    if (value == null) {
+      continue;
+    }
+
+    const name = camelCase(variableName.substr(prefix.length));
+
+    variables[name] = parse(value);
+  }
+
+  return variables;
 };
