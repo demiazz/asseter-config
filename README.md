@@ -14,7 +14,7 @@
 <div align="center">
   <!-- NPM version -->
   <a href="https://www.npmjs.com/package/@asseter/config">
-    <img src="https://img.shields.io/npm/v/lighty.svg?style=flat-square"
+    <img src="https://img.shields.io/npm/v/@asseter/config.svg?style=flat-square"
       alt="NPM version" />
   </a>
   <!-- Build Status -->
