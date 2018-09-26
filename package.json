@@ -23,6 +23,9 @@
     "name": "Alexey Plutalov",
     "email": "demiazz.py@gmail.com"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "lint": "tslint --project .",
     "lint-staged": "lint-staged",
